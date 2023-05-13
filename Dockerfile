@@ -11,12 +11,12 @@ RUN apk update && \
 
 WORKDIR /app
 
-COPY /scripts/vote.py
-
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+COPY scripts/vote.py /app/vote.py
+
 EXPOSE 8000
 
-CMD ["python3", "vote.py", "runserver", "0.0.0.0:8000"]
+CMD ["python3", "vote.py"]
