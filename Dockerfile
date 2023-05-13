@@ -8,6 +8,9 @@ LABEL maintainer="ibPhantom <your.email@example.com>" \
 
 WORKDIR /app
 
+RUN pip3 install --upgrade pip
+
+
 COPY . .
 
 COPY scripts/vote.py /app/vote.py
