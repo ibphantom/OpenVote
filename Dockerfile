@@ -1,4 +1,4 @@
-FROM python:3.9-alpine
+FROM python:3.9
 
 LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.description="A containerized version of OpenVote" \
@@ -6,13 +6,10 @@ LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.build-date="2023-05-12" \
       org.opencontainers.image.source="https://github.com/ibphantom/OpenVote/"
 
-RUN apk update && \
-    apk add --no-cache gcc musl-dev
-
-WORKDIR /app
-
 RUN pip3 install --upgrade pip
 RUN pip3 install python3-flask
+
+WORKDIR /app
 
 COPY . .
 
