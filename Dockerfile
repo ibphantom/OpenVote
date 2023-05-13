@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.9-slim-buster
 
 LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.description="A containerized version of OpenVote" \
