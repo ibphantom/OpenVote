@@ -1,6 +1,6 @@
-FROM python:3.9-slim-buster
+FROM python:3.9-alpine
 
-RUN apt-get update && apt-get install -y python3-pip
+RUN apk add --no-cache python3-pip
 
 LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.description="A containerized version of OpenVote" \
@@ -10,7 +10,10 @@ LABEL maintainer="ibPhantom <your.email@example.com>" \
 
 WORKDIR /app
 
-RUN pip3 install flask
+COPY requirements.txt .
+
+RUN pip3 install -r requirements.txt
+
 
 COPY . .
 
