@@ -1,8 +1,4 @@
-FROM python:3.9-alpine
-
-RUN apk add --no-cache python3-dev
-
-RUN pip3 install --no-cache-dir --upgrade pip
+FROM alpine:3.15
 
 LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.description="A containerized version of OpenVote" \
@@ -10,17 +6,8 @@ LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.build-date="2023-05-12" \
       org.opencontainers.image.source="https://github.com/ibphantom/OpenVote/"
 
-WORKDIR /app
+RUN apk add --no-cache python3 py3-pip
 
-COPY requirements.txt .
+COPY scripts/vote.py /scripts/vote.py
 
-RUN pip3 install -r requirements.txt
-
-
-COPY . .
-
-COPY scripts/vote.py /app/vote.py
-
-EXPOSE 8000
-
-CMD ["python3", "vote.py"]
+CMD python3 /scripts/vote.py
