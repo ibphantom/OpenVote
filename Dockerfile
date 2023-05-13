@@ -6,9 +6,6 @@ LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.build-date="2023-05-12" \
       org.opencontainers.image.source="https://github.com/ibphantom/OpenVote/"
 
-RUN pip3 install --upgrade pip
-RUN pip3 install python3-flask
-
 WORKDIR /app
 
 COPY . .
