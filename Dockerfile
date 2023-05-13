@@ -1,5 +1,6 @@
 FROM alpine:3.15
-RUN apk update && upgrade
+RUN apk update
+RUN apk upgrade
 RUN apk add --no-cache python3 py3-pip
 CMD ln -s /usr/bin/clear /usr/bin/cls
 WORKDIR /VOTE
