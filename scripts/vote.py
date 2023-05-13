@@ -33,7 +33,7 @@ def main():
 
     while True:
         # Prompt the user for input
-        cls
+        os.system('cls')
         name = prompt_string("What is your name? ")
         os.system('cls')
         ssn_last_four = prompt_string("What are the last 4 digits of your SSN? ")
