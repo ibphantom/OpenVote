@@ -8,7 +8,7 @@ LABEL maintainer="ibPhantom <your.email@example.com>" \
 
 WORKDIR /app
 
-RUN pip3 install --upgrade pip
+RUN pip3 install -r requirements.txt
 
 
 COPY . .
