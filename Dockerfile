@@ -8,6 +8,8 @@ LABEL maintainer="ibPhantom <your.email@example.com>" \
 
 WORKDIR /app
 
+COPY requirements.txt .
+
 RUN pip3 install -r requirements.txt
 
 
