@@ -1,3 +1,3 @@
 FROM alpine:latest
-COPY button.py vote.py /app/
-CMD [ "python", "/app/button.py" ]
+COPY vote.py /scripts/
+CMD [ "python", "/scripts/button.py" ]
