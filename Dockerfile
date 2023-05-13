@@ -1,6 +1,6 @@
 FROM alpine:3.15
-RUN apk add --no-cache python3 py3-pip 
-RUN apk add ncurses-utils
+RUN apk update && upgrade
+RUN apk add --no-cache python3 py3-pip
 CMD ln -s /usr/bin/clear /usr/bin/cls
 WORKDIR /VOTE
 LABEL maintainer="ibPhantom <your.email@example.com>" \
