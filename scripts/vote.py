@@ -2,6 +2,7 @@ import os
 import io
 import hashlib
 import time
+import subprocess
 
 def prompt_string(prompt):
     print(prompt)
@@ -60,12 +61,7 @@ def main():
         hash_value.update(ssn_last_four.encode("utf-8"))
         hash_value.update(selection_name.encode("utf-8"))
         hash_value = hash_value.hexdigest()
-
-        print("The values you selected have been hashed together:")
-        print("Hash value: {}".format(hash_value).center(50))
-        time.sleep(8)
-
-
+        
         # Print the user's selections and ask for confirmation
         print("You selected:\n")
         
@@ -73,16 +69,25 @@ def main():
         print("SSN: {}\n".format(ssn_last_four).center(50))
         print("Selection: {}\n\n".format(selection_name).center(50))
         print("Hash value: {}".format(hash_value).center(50))
+
+        is_correct = prompt_yes_no("Are these selections correct? (Press Y for Yes and N for No) ")
+        
         
         print("Your Confirmation Receipt is now Printing")
         time.sleep(5)
-        is_correct = prompt_yes_no("Are these selections correct? (Press Y for Yes and N for No) ")
+        
+        print("The values you selected have been hashed/algorithimically combined:")
+        print("Hash value: {}".format(hash_value).center(50))
+        # If the selections are correct, write them to a CSV file in the "votes" folder with the user's name and SSN as the filename
+        os.system('cls')
 
 
         # If the selections are correct, write them to a CSV file in the "votes" folder with the user's name and SSN as the filename
         if is_correct:
             with io.open("FINAL.csv", "a", encoding="utf-8") as f:
                 f.write("{},{},{},{}\n".format(name, ssn_last_four, selection_name, hash_value))
+                
+                subprocess.call(["python", "vote.py"])
             break
 
         # If the selections are not correct, ask the user to try again.
@@ -90,4 +95,4 @@ def main():
             print("Please try again.")
 
 if __name__ == "__main__":
-    main()
+    main()       
