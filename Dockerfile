@@ -1,5 +1,7 @@
 FROM python:3.9-slim-buster
 
+RUN apt-get update && apt-get install -y python3-pip
+
 LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.description="A containerized version of OpenVote" \
       org.label-schema.version="0.0.1" \
