@@ -1,6 +1,8 @@
 FROM python:3.9-alpine
 
-RUN apk add --no-cache python3-pip python3-dev
+RUN apk add --no-cache python3-dev
+
+RUN pip3 install --no-cache-dir --upgrade pip
 
 LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.description="A containerized version of OpenVote" \
