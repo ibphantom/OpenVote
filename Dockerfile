@@ -1,15 +1,22 @@
-FROM alpine:latest
+FROM python:3.9-alpine
 
-# Update apk packages and install Python3 and pip
+LABEL maintainer="Your Name <your.email@example.com>" \
+      org.label-schema.description="A containerized version of OpenVote" \
+      org.label-schema.version="1.0.0" \
+      org.label-schema.build-date="2022-05-12" \
+      org.opencontainers.image.source="https://github.com/ibphantom/OpenVote/"
+
 RUN apk update && \
-    apk add --no-cache python3 py3-pip && \
-    pip install --upgrade pip
+    apk add --no-cache gcc musl-dev
 
-# Create and set the working directory
 WORKDIR /app
 
-# Copy the vote.py script to the container
-COPY scripts/vote.py .
+COPY requirements.txt .
 
-# Set the entry point for the container
-ENTRYPOINT ["python3", "vote.py"]
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 8000
+
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
