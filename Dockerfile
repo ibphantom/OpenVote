@@ -1,5 +1,6 @@
 FROM alpine:3.15
-RUN apk add --no-cache python3 py3-pip
+RUN apk add --no-cache python3 py3-pip ncurses-utils
+CMD ln -s /usr/bin/clear /usr/bin/cls
 WORKDIR /VOTE
 LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.description="A containerized version of OpenVote" \
