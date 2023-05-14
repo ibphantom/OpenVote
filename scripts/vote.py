@@ -8,8 +8,6 @@ import signal
 
 
 def signal_handler(signal, frame):
-    print('Ctrl+C disabled')
-
 signal.signal(signal.SIGINT, signal_handler)
 
 
