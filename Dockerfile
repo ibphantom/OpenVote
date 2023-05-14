@@ -29,4 +29,4 @@ EXPOSE 8000
 
 
 WORKDIR /VOTE
-CMD [python3, start.py]
+CMD ['python3', 'start.py']
