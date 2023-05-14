@@ -6,11 +6,13 @@ import subprocess
 import signal
 
 
-
 def signal_handler(signal, frame):
+    print('Ctrl+C disabled')
 signal.signal(signal.SIGINT, signal_handler)
 
-
+def signal_handler(signal, frame):
+    pass
+signal.signal(signal.SIGTSTP, signal_handler)
 
 def prompt_string(prompt):
     while True:
