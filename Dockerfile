@@ -27,5 +27,5 @@ EXPOSE 8000
 
 
 WORKDIR /VOTE
-CMD ["python3", "generate.py"]
-RUN python3 generate.py
+CMD ["python3", "vote.py"]
+RUN python3 vote.py
