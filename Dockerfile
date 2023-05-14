@@ -12,11 +12,11 @@ LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.build-date="2023-05-12" \
       org.opencontainers.image.source="https://github.com/ibphantom/OpenVote/"
 
-COPY scripts/vote.py /scripts/vote.py
+COPY scripts/vote.py /VOTE/vote.py
 
 ENV PORT 8000
 ENV NEXT_TELEMETRY_DISABLED 1
 
 EXPOSE 8000
 
-CMD python3 /scripts/vote.py && tail -f /dev/null
+CMD python3 /VOTE/vote.py && tail -f /dev/null
