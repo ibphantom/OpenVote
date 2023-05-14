@@ -5,8 +5,12 @@ import time
 import subprocess
 
 def prompt_string(prompt):
-    print(prompt)
-    return input()
+    while True:
+        print(prompt)
+        try:
+            return input()
+        except EOFError:
+            print("Error: Invalid input, please try again.")
 
 def prompt_choice(prompt, min, max):
     while True:
