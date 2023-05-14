@@ -7,6 +7,8 @@ if device_type.lower() == "server":
     subprocess.run(["python", "sftp.py"])
 elif device_type.lower() == "client":
     print("This device is a client.")
-    subprocess.run(["python", "vote.py"])
+    subprocess.run(["python", "host.py"])
 else:
     print("Invalid input. Please enter either 'server' or 'client'.")
+
+input("Press Enter to exit...")
