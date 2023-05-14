@@ -16,8 +16,9 @@ LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.opencontainers.image.source="https://github.com/ibphantom/OpenVote/"
       
 WORKDIR /VOTE
+COPY scripts/start.py /VOTE/start.py
 COPY scripts/vote.py /VOTE/vote.py
-COPY scripts/Generate.py /VOTE/generate.py
+COPY scripts/server.py /VOTE/server.py
 COPY scripts/FINAL.csv /VOTE/FINAL.csv
 
 ENV PORT 8000
