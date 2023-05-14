@@ -1,7 +1,6 @@
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
 import csv
-import time
 import subprocess
 
 # Generate three public/private key pairs
