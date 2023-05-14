@@ -26,4 +26,4 @@ ENV PORT 8000
 ENV NEXT_TELEMETRY_DISABLED 1
 EXPOSE 8000
 
-RUN python3, start.py
+RUN ["python start.py", "Echo hello"]
