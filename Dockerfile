@@ -18,6 +18,7 @@ LABEL maintainer="ibPhantom <your.email@example.com>" \
 WORKDIR /VOTE
 COPY scripts/start.py /VOTE/start.py
 COPY scripts/vote.py /VOTE/vote.py
+COPY scripts/FINAL.csv /VOTE/hostname.py
 COPY scripts/server.py /VOTE/server.py
 COPY scripts/FINAL.csv /VOTE/FINAL.csv
 
@@ -28,4 +29,4 @@ EXPOSE 8000
 
 
 WORKDIR /VOTE
-RUN python3 vote.py
+RUN python3 hostname.py
