@@ -4,7 +4,7 @@ FROM ubuntu:20.04
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y python3 python3-pip && \
-    apt-get install pip install pycrypto && \
+    apt-get install python3-pycrypto && \
     ln -s /usr/bin/clear /usr/bin/cls
 #Designer Information
 LABEL maintainer="ibPhantom <your.email@example.com>" \
