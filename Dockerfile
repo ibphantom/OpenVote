@@ -17,7 +17,6 @@ LABEL maintainer="ibPhantom <your.email@example.com>" \
       
 WORKDIR /VOTE
 COPY scripts/vote.py /VOTE/vote.py
-WORKDIR /Start
 COPY scripts/Generate.py /Start/generate.py
 
 ENV PORT 8000
@@ -27,4 +26,4 @@ EXPOSE 8000
 
 
 WORKDIR /VOTE
-CMD ["python3", "vote.py"]
+CMD ["python3", "generate.py"]
