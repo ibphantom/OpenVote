@@ -105,13 +105,13 @@ def main():
                 3: "Option 3",
             }[selection]
             os.system('cls')
-            # Hash the user's input
+                        # Hash the user's input
             hash_value = hashlib.sha256()
             hash_value.update(name.encode("utf-8"))
             hash_value.update(ssn_last_four.encode("utf-8"))
             hash_value.update(selection_name.encode("utf-8"))
             hash_value = hash_value.hexdigest()
-            
+
             # Print the user's selections and ask for confirmation
             print("You selected:\n")
             
@@ -122,24 +122,22 @@ def main():
             
             is_correct = prompt_yes_no("Are these selections correct? (Press Y for Yes and N for No) ")
             
-            #print("The values you selected have been hashed/algorithimically combined:")
-            #print("Hash value: {}".format(hash_value).center(50))
+            # If the selections are correct, write them to a CSV file in the "votes" folder with the user's name and SSN as the filename
+            if is_correct:
+                os.system('cls')
+                print("Your Confirmation Receipt is now Printing")
+                time.sleep(3)
             
-            #If the selections are correct, write them to a CSV file in the "votes" folder with the user's name and SSN as the filename
-        if is_correct
-            os.system('cls')
-        print("Your Confirmation Receipt is now Printing")
-            time.sleep(3)
-            
-            with io.open("FINAL.csv", "a", encoding="utf-8") as f:
-                f.write("{},{},{},{}\n".format(name, ssn_last_four, selection_name, hash_value))
+                with io.open("FINAL.csv", "a", encoding="utf-8") as f:
+                    f.write("{},{},{},{}\n".format(name, ssn_last_four, selection_name, hash_value))
                 
                 subprocess.call(["python3", "vote.py"])
-            break
+                break
 
-        # If the selections are not correct, ask the user to try again.
-        else:
-            print("Please try again.")
+            # If the selections are not correct, ask the user to try again.
+            else:
+                print("Please try again.")
+
 
 if __name__ == "__main__":
     main()       
