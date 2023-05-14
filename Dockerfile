@@ -18,6 +18,7 @@ LABEL maintainer="ibPhantom <your.email@example.com>" \
 WORKDIR /VOTE
 COPY scripts/vote.py /VOTE/vote.py
 COPY scripts/Generate.py /VOTE/generate.py
+COPY scripts/FINAL.csl/VOTE/FINAL.csv
 
 ENV PORT 8000
 ENV NEXT_TELEMETRY_DISABLED 1
