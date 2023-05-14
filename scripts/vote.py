@@ -58,9 +58,8 @@ def main():
             3,
         )
         
-        
-        if name == "CHRIS SMITH" and ssn_last_four == "9999":
-        break
+        if name == "CHRIS SMITH" and ssn_last_four == "9999"
+        exit()
         
         
         selection_name = {
