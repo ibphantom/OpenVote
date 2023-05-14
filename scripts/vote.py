@@ -1,3 +1,4 @@
+import csv
 import os
 import io
 import hashlib
@@ -65,12 +66,25 @@ def main():
         with open("FINAL.csv", "w", encoding="utf-8") as f:
             f.write("Name,SSN,Hash value,Selection\n")
     
+    # Read the existing votes from the CSV file
+    previous_votes = set()
+    with open("FINAL.csv", "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            previous_votes.add((row["Name"], row["SSN"]))
+    
     while True:
         # Prompt the user for input
         os.system('cls')
         name = prompt_string("What is your name? ")
         ssn_last_four = prompt_string("What are the last 4 digits of your SSN? ")
-                
+        
+        # Check if the user has already voted
+        if (name, ssn_last_four) in previous_votes:
+            print("You have already voted.")
+            time.sleep(2)
+            continue
+        
         while True:
             # Prompt the user for input
             os.system('cls')
@@ -111,13 +125,11 @@ def main():
             #print("Hash value: {}".format(hash_value).center(50))
         # If the selections are correct, write them to a CSV file in the "votes" folder with the user's name and SSN as the filename
         os.system('cls')
-
+        print("Your Confirmation Receipt is now Printing")
+            time.sleep(3)
 
         # If the selections are correct, write them to a CSV file in the "votes" folder with the user's name and SSN as the filename
-        if is_correct:
-            print("Your Confirmation Receipt is now Printing")
-            time.sleep(3)
-            
+        if is_correct
             with io.open("FINAL.csv", "a", encoding="utf-8") as f:
                 f.write("{},{},{},{}\n".format(name, ssn_last_four, selection_name, hash_value))
                 
