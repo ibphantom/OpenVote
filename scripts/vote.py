@@ -130,6 +130,10 @@ def main():
 
         # If the selections are correct, write them to a CSV file in the "votes" folder with the user's name and SSN as the filename
         if is_correct
+            os.system('cls')
+        print("Your Confirmation Receipt is now Printing")
+            time.sleep(3)
+            
             with io.open("FINAL.csv", "a", encoding="utf-8") as f:
                 f.write("{},{},{},{}\n".format(name, ssn_last_four, selection_name, hash_value))
                 
