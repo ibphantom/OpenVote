@@ -123,12 +123,8 @@ def main():
             
             #print("The values you selected have been hashed/algorithimically combined:")
             #print("Hash value: {}".format(hash_value).center(50))
-        # If the selections are correct, write them to a CSV file in the "votes" folder with the user's name and SSN as the filename
-        os.system('cls')
-        print("Your Confirmation Receipt is now Printing")
-            time.sleep(3)
-
-        # If the selections are correct, write them to a CSV file in the "votes" folder with the user's name and SSN as the filename
+            
+            #If the selections are correct, write them to a CSV file in the "votes" folder with the user's name and SSN as the filename
         if is_correct
             os.system('cls')
         print("Your Confirmation Receipt is now Printing")
