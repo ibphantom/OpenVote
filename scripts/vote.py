@@ -8,6 +8,21 @@ def prompt_string(prompt):
     while True:
         print(prompt)
         try:
+            user_input = input()
+            # Check if the user has entered a special name and SSN to close the prompt
+            if user_input.lower() == "exit" or user_input[-4:] == "0000":
+                print("Exiting the prompt...")
+                time.sleep(2)
+                sys.exit(0)
+            return user_input
+        except EOFError:
+            print("Error: Invalid input, please try again.")
+
+
+def prompt_string(prompt):
+    while True:
+        print(prompt)
+        try:
             return input()
         except EOFError:
             print("Error: Invalid input, please try again.")
