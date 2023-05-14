@@ -28,4 +28,3 @@ EXPOSE 8000
 
 WORKDIR /VOTE
 CMD ["python3", "vote.py"]
-RUN python3 vote.py
