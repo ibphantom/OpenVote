@@ -5,6 +5,7 @@ import hashlib
 import time
 import subprocess
 import signal
+import sys
 
 
 def signal_handler(signal, frame):
