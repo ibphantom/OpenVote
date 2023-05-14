@@ -5,7 +5,7 @@ import csv
 # Generate three public/private key pairs
 keys = []
 for i in range(1, 4):
-    key = RSA.generate(2048)
+    key = RSA.generate(4096)
     keys.append(key)
     with open(f"decryptkey-{i}.pem", "wb") as f:
         f.write(key.export_key(format="PEM"))
