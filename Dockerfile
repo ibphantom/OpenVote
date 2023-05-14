@@ -1,4 +1,4 @@
-FROM alpine:3.15
+FROM ubuntu:latest
 RUN apk update
 RUN apk upgrade
 RUN apk add --no-cache python3 py3-pip
