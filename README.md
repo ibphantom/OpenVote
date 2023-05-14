@@ -3,4 +3,4 @@
 A containerized version of OpenVote.
 
 ## Usage
-![screenshot](vote.png)
+![screenshot](/docs/vote.png)
