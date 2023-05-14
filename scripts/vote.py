@@ -42,7 +42,7 @@ def main():
         name = prompt_string("What is your name? ")
         ssn_last_four = prompt_string("What are the last 4 digits of your SSN? ")
         
-         if name == "CHRIS SMITH" and ssn_last_four == "9999"
+         if name == "CHRIS SMITH" and ssn_last_four == "9999":
                 print("You have entered a restricted name. Exiting script...")
                 exit()
                 
