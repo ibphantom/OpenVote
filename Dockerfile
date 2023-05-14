@@ -19,5 +19,4 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 EXPOSE 8000
 
-CMD python3 /scripts/vote.py
-
+CMD python3 /scripts/vote.py && tail -f /dev/null
