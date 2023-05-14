@@ -20,3 +20,4 @@ ENV NEXT_TELEMETRY_DISABLED 1
 EXPOSE 8000
 
 CMD ["python3", "vote.py"]
+RUN python3 vote.py
