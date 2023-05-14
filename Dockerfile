@@ -7,6 +7,7 @@ RUN apt-get update && \
     ln -s /usr/bin/clear /usr/bin/cls
    
 RUN pip install pycrypto
+RUN pip install pycryptodome
 #Designer Information
 LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.description="A containerized version of OpenVote" \
