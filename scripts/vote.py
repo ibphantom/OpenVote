@@ -37,7 +37,7 @@ def main():
             f.write("Name,SSN,Hash value,Selection\n")
     while True:
     # Prompt the user for input
-    os.system('cls')
+           os.system('cls')
     name = prompt_string("What is your name? ")
     ssn_last_four = prompt_string("What are the last 4 digits of your SSN? ")   
     
