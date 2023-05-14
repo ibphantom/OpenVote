@@ -1,10 +1,12 @@
 import subprocess
+import sys
 
-try:
-    device_type = input("Is this device a server or a client? ")
-except EOFError:
-    print("Error: End of input reached unexpectedly.")
-    exit(1)
+while True:
+    try:
+        device_type = input("Is this device a server or a client? ")
+        break
+    except EOFError:
+        print("Error: End of input reached unexpectedly. Please try again.")
 
 if device_type.lower() == "server":
     print("This device is a server.")
