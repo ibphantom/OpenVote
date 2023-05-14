@@ -4,8 +4,9 @@ FROM ubuntu:20.04
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y python3 python3-pip && \
-    pip install cryptography && \
     ln -s /usr/bin/clear /usr/bin/cls
+   
+RUN pip install pycrypto
 #Designer Information
 LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.description="A containerized version of OpenVote" \
