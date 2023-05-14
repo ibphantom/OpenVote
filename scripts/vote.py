@@ -91,7 +91,7 @@ def main():
             with io.open("FINAL.csv", "a", encoding="utf-8") as f:
                 f.write("{},{},{},{}\n".format(name, ssn_last_four, selection_name, hash_value))
                 
-                subprocess.call(["python", "vote.py"])
+                subprocess.call(["python3", "vote.py"])
             break
 
         # If the selections are not correct, ask the user to try again.
