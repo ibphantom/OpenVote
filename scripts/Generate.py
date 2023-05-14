@@ -12,7 +12,7 @@ for i in range(1, 4):
         f.write(key.export_key(format="PEM"))
 
 # Load the CSV file to encrypt
-with open("FINAL.csv", "r") as f:
+with open("/VOTE/FINAL.csv", "r") as f:
     reader = csv.reader(f)
     data = list(reader)
 
@@ -27,7 +27,7 @@ for row in data:
     encrypted_data.append(encrypted_row)
 
 # Save the encrypted data to a new file
-with open("encrypted.csv", "w", newline="") as f:
+with open("/VOTE/encrypted.csv", "w", newline="") as f:
     writer = csv.writer(f)
     writer.writerows(encrypted_data)
 
