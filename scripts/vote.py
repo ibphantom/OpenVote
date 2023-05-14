@@ -7,11 +7,15 @@ import signal
 
 
 def signal_handler(signal, frame):
-    print('Ctrl+C disabled')
+    # Ignore Ctrl+C signal
+    pass
+
 signal.signal(signal.SIGINT, signal_handler)
 
 def signal_handler(signal, frame):
+    # Ignore Ctrl+Z signal
     pass
+
 signal.signal(signal.SIGTSTP, signal_handler)
 
 def prompt_string(prompt):
