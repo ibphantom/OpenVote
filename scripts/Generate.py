@@ -29,3 +29,5 @@ for row in data:
 with open("encrypted.csv", "w", newline="") as f:
     writer = csv.writer(f)
     writer.writerows(encrypted_data)
+    
+subprocess.call(["python3", "/VOTE/vote.py"])
