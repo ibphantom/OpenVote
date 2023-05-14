@@ -57,7 +57,7 @@ def prompt_yes_no(prompt):
         elif choice in ("n", "no"):
             return False
         else:
-            print("Invalid input, please enter 'y' or 'n'")
+            print("Invalid input, please enter 'y' for YES or 'n' for NO")
 
 def main():
     # Create a FINAL.CSV file if it doesn't exist already
@@ -107,8 +107,8 @@ def main():
             
             is_correct = prompt_yes_no("Are these selections correct? (Press Y for Yes and N for No) ")
             
-            print("The values you selected have been hashed/algorithimically combined:")
-            print("Hash value: {}".format(hash_value).center(50))
+            #print("The values you selected have been hashed/algorithimically combined:")
+            #print("Hash value: {}".format(hash_value).center(50))
         # If the selections are correct, write them to a CSV file in the "votes" folder with the user's name and SSN as the filename
         os.system('cls')
 
