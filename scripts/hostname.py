@@ -1,17 +1,23 @@
-#!/usr/bin/env python3
-
-import os
-import random
 import subprocess
+import requests
+import random
+import string
 
-# List of words to choose from
-words = ["apple", "banana", "cherry", "grape", "lemon", "orange", "pear", "peach", "plum"]
+# Get a random word from the Wordnik API
+response = requests.get("https://api.wordnik.com/v4/words.json/randomWord?api_key=YOUR_API_KEY")
+if response.status_code != 200:
+    print("Error getting random word")
+    exit()
+random_word = response.json()["word"]
 
-# Generate a random hostname
-hostname = f"{random.choice(words)}-{random.choice(words)}-{random.randint(100, 999)}"
+# Generate a random string of length 8 for suffix
+suffix = ''.join(random.choices(string.ascii_lowercase, k=8))
 
-# Set the hostname
-os.system(f"hostnamectl set-hostname {hostname}")
+# Concatenate the hostname prefix and suffix
+new_hostname = f"VoterMachine-{random_word}-{suffix}"
 
-# Reboot the system
+# Rename the hostname
+subprocess.run(["hostnamectl", "set-hostname", new_hostname])
+
+# Reboot the machine
 subprocess.run(["reboot"])
