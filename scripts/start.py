@@ -13,7 +13,7 @@ if device_type.lower() == "server":
     subprocess.run(["python3", "sftp.py"])
 elif device_type.lower() == "client":
     print("This device is a client.")
-    subprocess.run(["python3", "vote.py"])
+    subprocess.run(["python3", "hostname.py"])
 else:
     print("Invalid input. Please enter either 'server' or 'client'.")
 
