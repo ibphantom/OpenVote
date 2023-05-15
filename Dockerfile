@@ -27,4 +27,4 @@ ENV NEXT_TELEMETRY_DISABLED 1
 EXPOSE 8000
 
 WORKDIR /VOTE
-RUN [python3 start.py]
+CMD ["python3", "start.py"]
