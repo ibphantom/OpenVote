@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 # Updates | Install Python | Assure clear command is linked to cls command
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y python3 python3-pip && \
+    apt-get install -y python3 python3-pip openssh-server ufw && \
     ln -s /usr/bin/clear /usr/bin/cls
 
 RUN pip install pycrypto
