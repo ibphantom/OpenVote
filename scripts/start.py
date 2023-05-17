@@ -3,6 +3,7 @@ import sys
 import os
 import socket
 import uuid
+import random
 
 while True:
     try:
@@ -23,13 +24,16 @@ if device_type.lower() == "server":
     subprocess.run(["python3", "sftp.py"])
 elif device_type.lower() == "client":
     print("This device is a client.")
-    # Generate a random hostname if one doesn't already exist
+    # Rename the hostname if it already has one, or generate a random hostname otherwise
     current_hostname = socket.gethostname()
     if current_hostname.startswith("localhost"):
-        new_hostname = f"client-{str(uuid.uuid4())[:8]}"
-        subprocess.run(["sudo", "hostnamectl", "set-hostname", new_hostname])
-    subprocess.run(["python3", "vote.py"])
+        new_hostname = f"Voting System - {random.randint(1, 100)}"
+    else:
+        new_hostname = f"Voting System - {random.randint(1, 100)} ({current_hostname})"
+    subprocess.run(["sudo", "hostnamectl", "set-hostname", new_hostname])
+    subprocess.run(["python3", "hostname.py"])
 else:
     print("Invalid input. Please enter either 'server' or 'client'.")
 
 input("Press Enter to exit...")
+
