@@ -24,13 +24,6 @@ if device_type.lower() == "server":
     subprocess.run(["python3", "sftp.py"])
 elif device_type.lower() == "client":
     print("This device is a client.")
-    # Rename the hostname if it already has one, or generate a random hostname otherwise
-    current_hostname = socket.gethostname()
-    if current_hostname.startswith("localhost"):
-        new_hostname = f"Voting System - {random.randint(1, 100)}"
-    else:
-        new_hostname = f"Voting System - {random.randint(1, 100)} ({current_hostname})"
-    subprocess.run(["hostnamectl", "set-hostname", new_hostname])
     subprocess.run(["python3", "vote.py"])
 else:
     print("Invalid input. Please enter either 'server' or 'client'.")
