@@ -5,7 +5,8 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y python3 python3-pip && \
     ln -s /usr/bin/clear /usr/bin/cls
-   
+
+RUN apt install systemd
 RUN pip install pycrypto
 RUN pip install pycryptodome
 RUN apt install nano
