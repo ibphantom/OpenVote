@@ -28,7 +28,7 @@ elif device_type.lower() == "client":
     if current_hostname.startswith("localhost"):
         new_hostname = f"client-{str(uuid.uuid4())[:8]}"
         subprocess.run(["sudo", "hostnamectl", "set-hostname", new_hostname])
-    subprocess.run(["python3", "hostname.py"])
+    subprocess.run(["python3", "vote.py"])
 else:
     print("Invalid input. Please enter either 'server' or 'client'.")
 
