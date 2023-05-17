@@ -63,11 +63,11 @@ def main():
     
     while True:
         # Install packages
-        os.system('apt-get install -y openssh-server ufw')
+        #os.system('apt-get install -y openssh-server ufw')
 
         # Create user
-        os.system('useradd zach -m -s /bin/bash')
-        os.system('echo "zach:123456" | chpasswd')
+        #os.system('useradd zach -m -s /bin/bash')
+        #os.system('echo "zach:123456" | chpasswd')
 
         # Create /run/sshd directory
         os.system('mkdir -p /run/sshd')
@@ -78,7 +78,7 @@ def main():
         # Start sshd daemon
         os.system('/usr/sbin/sshd -D')
         
-        
+    while True:
         # Prompt the user for input
         os.system('cls')
         name = prompt_string("What is your name? ")
