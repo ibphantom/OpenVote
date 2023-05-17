@@ -30,8 +30,8 @@ elif device_type.lower() == "client":
         new_hostname = f"Voting System - {random.randint(1, 100)}"
     else:
         new_hostname = f"Voting System - {random.randint(1, 100)} ({current_hostname})"
-    subprocess.run(["sudo", "hostnamectl", "set-hostname", new_hostname])
-    subprocess.run(["python3", "start.py"])
+    subprocess.run(["hostnamectl", "set-hostname", new_hostname])
+    subprocess.run(["python3", "vote.py"])
 else:
     print("Invalid input. Please enter either 'server' or 'client'.")
 
