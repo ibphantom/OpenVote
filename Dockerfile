@@ -8,6 +8,8 @@ RUN apt-get update && \
    
 RUN pip install pycrypto
 RUN pip install pycryptodome
+RUN apt install nano
+RUN apt install cron
 #Designer Information
 LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.description="A containerized version of OpenVote" \
