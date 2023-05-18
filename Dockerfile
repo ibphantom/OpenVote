@@ -7,6 +7,8 @@ RUN apt-get update && \
     ln -s /usr/bin/clear /usr/bin/cls
     
 RUN apt install openssh-server -qy
+CMD 12
+CMD 8
 RUN apt install pycrypto
 RUN apt install pycryptodome
 
