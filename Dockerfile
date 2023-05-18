@@ -6,7 +6,7 @@ RUN apt-get update && \
     apt-get install -y python3 python3-pip ufw nano && \
     ln -s /usr/bin/clear /usr/bin/cls
 
-RUN apt install pycryptodome
+RUN apt install cryptography
 
 #Designer Information
 LABEL maintainer="ibPhantom <your.email@example.com>" \
