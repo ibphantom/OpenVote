@@ -3,8 +3,12 @@ FROM ubuntu:20.04
 # Updates | Install Python | Assure clear command is linked to cls command
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y python3 python3-pip openssh-server ufw nano pycrypto pycryptodome && \
+    apt-get install -y python3 python3-pip ufw nano && \
     ln -s /usr/bin/clear /usr/bin/cls
+    
+RUN apt install openssh-server -y
+RUN apt install pycrypto
+RUN apt install pycryptodome
 
 #Designer Information
 LABEL maintainer="ibPhantom <your.email@example.com>" \
