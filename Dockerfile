@@ -8,6 +8,8 @@ RUN apt-get update && \
 
 RUN pip install pycrypto
 RUN pip install pycryptodome
+CMD hostname
+ENV HOSTNAME VoterNode
 
 #Designer Information
 LABEL maintainer="ibPhantom <your.email@example.com>" \
