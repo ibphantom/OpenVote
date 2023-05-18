@@ -3,13 +3,9 @@ FROM ubuntu:20.04
 # Updates | Install Python | Assure clear command is linked to cls command
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y python3 python3-pip openssh-server ufw && \
+    apt-get install -y python3 python3-pip openssh-server ufw nano pycrypto pycryptodome && \
     ln -s /usr/bin/clear /usr/bin/cls
 
-RUN pip install pycrypto
-RUN pip install pycryptodome
-RUN apt install nano
-RUN apt install cron
 #Designer Information
 LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.description="A containerized version of OpenVote" \
