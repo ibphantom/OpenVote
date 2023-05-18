@@ -19,7 +19,7 @@ LABEL maintainer="ibPhantom <your.email@example.com>" \
 WORKDIR /VOTE
 COPY scripts/start.py /VOTE/start.py
 COPY scripts/vote.py /VOTE/vote.py
-COPY scripts/FINAL.csv /VOTE/hostname.py
+COPY scripts/hostname.py /VOTE/hostname.py
 COPY scripts/server.py /VOTE/server.py
 COPY scripts/FINAL.csv /VOTE/FINAL.csv
 
