@@ -8,8 +8,8 @@ while True:
         os.system('apt-get install -y openssh-server ufw')
         pip install paramiko
         #Create user
-        os.system('useradd zach -m -s /bin/bash')
-        os.system('echo "zach:123456" | chpasswd')
+        #os.system('useradd zach -m -s /bin/bash')
+        #os.system('echo "zach:123456" | chpasswd')
 
         # Create /run/sshd directory
         os.system('mkdir -p /run/sshd')
