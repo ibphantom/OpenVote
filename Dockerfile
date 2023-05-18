@@ -8,6 +8,7 @@ RUN apt-get update && \
 
 RUN pip install pycrypto
 RUN pip install pycryptodome
+RUN pip install paramiko
 CMD hostname
 ENV HOSTNAME VoterNode
 
