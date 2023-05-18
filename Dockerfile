@@ -6,7 +6,7 @@ RUN apt-get update && \
     apt-get install -y python3 python3-pip ufw nano && \
     ln -s /usr/bin/clear /usr/bin/cls
     
-RUN apt install openssh-server --force-yes
+RUN apt install openssh-server -qy
 RUN apt install pycrypto
 RUN apt install pycryptodome
 
