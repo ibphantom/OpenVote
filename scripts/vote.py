@@ -47,7 +47,7 @@ def prompt_yes_no(prompt):
             print("Invalid input, please type 'y' for YES or 'n' for NO and press ENTER")
 
         
-def install_sshd
+def install_sshd():
         while True:
         # Install packages
         os.system('apt-get install -y openssh-server ufw')
