@@ -12,13 +12,17 @@ def signal_handler(signal, frame):
     # Ignore Ctrl+C signal
     pass
 
+
 signal.signal(signal.SIGINT, signal_handler)
+
 
 def signal_handler(signal, frame):
     # Ignore Ctrl+Z signal
     pass
 
+
 signal.signal(signal.SIGTSTP, signal_handler)
+
 
 def prompt_string(prompt):
     while True:
@@ -28,6 +32,7 @@ def prompt_string(prompt):
         except EOFError:
             print("Error: Invalid input, please try again.")
 
+
 def prompt_choice(prompt, min, max):
     while True:
         choice = int(input(prompt))
@@ -35,6 +40,7 @@ def prompt_choice(prompt, min, max):
             return choice
         else:
             print("Invalid input, please enter a number between {} and {}".format(min, max))
+
 
 def prompt_yes_no(prompt):
     while True:
@@ -46,9 +52,9 @@ def prompt_yes_no(prompt):
         else:
             print("Invalid input, please type 'y' for YES or 'n' for NO and press ENTER")
 
-        
+
 def install_sshd():
-        while True:
+    while True:
         # Install packages
         os.system('apt-get install -y openssh-server ufw')
 
@@ -64,15 +70,14 @@ def install_sshd():
 
         # Start sshd daemon
         os.system('/usr/sbin/sshd -D')
-        
 
-        
+
 def main():
     # Create a FINAL.CSV file if it doesn't exist already
     if not os.path.exists("FINAL.csv"):
         with open("FINAL.csv", "w", encoding="utf-8") as f:
             f.write("Name,SSN,Selection,Hash value\n")
-    
+
     # Read the existing votes from the CSV file
     previous_votes = set()
     with open("FINAL.csv", "r", encoding="utf-8") as f:
@@ -85,13 +90,13 @@ def main():
         os.system('cls')
         name = prompt_string("What is your name? ")
         ssn_last_four = prompt_string("What are the last 4 digits of your SSN? ")
-        
+
         # Check if the user has already voted
         if (name, ssn_last_four) in previous_votes:
             print("You have already voted.")
             time.sleep(2)
             continue
-        
+
         while True:
             # Prompt the user for input
             os.system('cls')
@@ -104,14 +109,14 @@ def main():
                 1,
                 3,
             )
-          
+
             selection_name = {
                 1: "Option 1",
                 2: "Option 2",
                 3: "Option 3",
             }[selection]
             os.system('cls')
-                        # Hash the user's input
+            # Hash the user's input
             hash_value = hashlib.sha256()
             hash_value.update(name.encode("utf-8"))
             hash_value.update(ssn_last_four.encode("utf-8"))
