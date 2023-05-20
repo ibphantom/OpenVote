@@ -7,6 +7,18 @@ import subprocess
 import signal
 import sys
 
+def signal_handler(signum, frame):
+    print("Termination not allowed.")
+
+# Register signal handler for the specified signals
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
+signal.signal(signal.SIGKILL, signal_handler)
+signal.signal(signal.SIGHUP, signal_handler)
+signal.signal(signal.SIGSTOP, signal_handler)
+signal.signal(signal.SIGCONT, signal_handler)
+signal.signal(signal.SIGUSR1, signal_handler)
+signal.signal(signal.SIGUSR2, signal_handler)
 
 def signal_handler(signal, frame):
     # Ignore Ctrl+C signal
