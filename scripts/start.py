@@ -12,15 +12,10 @@ while True:
     except EOFError:
         print("Error: End of input reached unexpectedly. Please try again.")
 
-# Create a cron job to start vote.py on boot
-cron_job = f'@reboot python3 /vote.py >/dev/null 2>&1\n'
-
-os.system('useradd zach -m -s /bin/bash')
-os.system('echo "zach:123456" | chpasswd')
-
-# Open the crontab file for editing and write the cron job
-with open('/etc/crontab', 'a') as file:
-    file.write(cron_job)
+# Add a cron job using crontab -e
+crontab_job = f'@reboot python3 /vote.py >/dev/null 2>&1\n'
+cron_command = f'(crontab -l ; echo "{crontab_job}") | crontab -'
+os.system(cron_command)
 
 if device_type.lower() == "server":
     print("This device is a server.")
@@ -32,4 +27,3 @@ else:
     print("Invalid input. Please enter either 'server' or 'client'.")
 
 input("Press Enter to exit...")
-
