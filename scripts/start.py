@@ -14,7 +14,7 @@ while True:
 
 # Create a cron job to start vote.py on boot if the device is a client
 if device_type.lower() == "client":
-    cron_job = '@reboot python3 vote.py >/dev/null 2>&1\n'
+    cron_job = '@reboot /bin/python3 /VOTE/vote.py >> /path/to/logfile.log 2>&1'
     cron_command = f'(crontab -l ; echo "{cron_job}") | crontab -'
     os.system(cron_command)
 
