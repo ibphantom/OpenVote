@@ -6,6 +6,7 @@ RUN apt-get update && \
     apt-get install -y python3 python3-pip ufw nano && \
     ln -s /usr/bin/clear /usr/bin/cls
 
+RUN pip install cron
 RUN pip install pycrypto
 RUN pip install pycryptodome
 RUN pip install paramiko
