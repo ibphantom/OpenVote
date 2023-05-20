@@ -12,10 +12,11 @@ while True:
     except EOFError:
         print("Error: End of input reached unexpectedly. Please try again.")
 
-# Add a cron job using crontab -e
-crontab_job = f'@reboot python3 /vote.py >/dev/null 2>&1\n'
-cron_command = f'(crontab -l ; echo "{crontab_job}") | crontab -'
-os.system(cron_command)
+# Create a cron job to start vote.py on boot if the device is a client
+if device_type.lower() == "client":
+    cron_job = '@reboot python3 /path/to/vote.py >/dev/null 2>&1\n'
+    cron_command = f'(crontab -l ; echo "{cron_job}") | crontab -'
+    os.system(cron_command)
 
 if device_type.lower() == "server":
     print("This device is a server.")
