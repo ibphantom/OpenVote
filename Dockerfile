@@ -30,5 +30,6 @@ ENV PORT 8000
 ENV NEXT_TELEMETRY_DISABLED 1
 EXPOSE 8000
 
+WORKDIR /
+CMD ["/bin/python3", "/VOTE/start.py"]
 WORKDIR /VOTE
-CMD ["python3", "start.py"]
