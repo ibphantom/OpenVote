@@ -26,10 +26,17 @@ COPY scripts/hostname.py /VOTE/hostname.py
 COPY scripts/server.py /VOTE/server.py
 COPY scripts/FINAL.csv /VOTE/FINAL.csv
 
+RUN chmod +x /VOTE/start.py
+RUN chmod +x /VOTE/votet.py
+RUN chmod +x /VOTE/hostname.py
+RUN chmod +x /VOTE/server.py
+RUN chmod +x /VOTE/FINAL.csv
+
+
 ENV PORT 8000
 ENV NEXT_TELEMETRY_DISABLED 1
 EXPOSE 8000
 
 WORKDIR /
-CMD ["/bin/python3", "/VOTE/start.py"]
+CMD ["python3", "/VOTE/start.py"]
 WORKDIR /VOTE
