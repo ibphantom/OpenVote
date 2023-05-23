@@ -1,7 +1,7 @@
 # Operating System
 FROM rockylinux/rockylinux:8
 # Install Python, pip, autoconf, and other dependencies
-RUN dnf -y install python3 python3-pip nano autoconf gcc && \
+RUN dnf -y install python3 python3-pip nano autoconf gcc python3-devel && \
     ln -s /usr/bin/clear /usr/bin/cls
 
 # Upgrade pip
