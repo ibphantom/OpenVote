@@ -3,12 +3,14 @@ FROM ubuntu:20.04
 # Updates | Install Python | Assure clear command is linked to cls command
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y python3 python3-pip ufw nano cron && \
+    apt-get install -y python3 python3-pip > /dev/null 2>&1 && \
+    #ufw nano cron && \
     ln -s /usr/bin/clear /usr/bin/cls
 
 RUN pip install pycrypto
 RUN pip install pycryptodome
 RUN pip install paramiko
+RUN pip install getpass
 CMD hostname
 ENV HOSTNAME VoterNode
 
