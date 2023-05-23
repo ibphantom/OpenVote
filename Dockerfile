@@ -1,7 +1,7 @@
 # Operating System
 FROM alpine:3.15
 # Install Python and other dependencies
-RUN apk add --no-cache python3 py3-pip nano ufw cron && \
+RUN apk add --no-cache python3 py3-pip nano && \
     ln -s /usr/bin/clear /usr/bin/cls
 
 # Upgrade pip
@@ -13,18 +13,11 @@ RUN python3 -m ensurepip && \
 RUN pip3 install pycrypto
 RUN pip3 install pycryptodome
 RUN pip3 install paramiko
-CMD hostname VoterNode
+CMD hostname
 ENV HOSTNAME VoterNode
 
-# Enable and start cron service
-RUN rc-update add crond
-RUN rc-service crond start
-
-RUN mkdir -p /etc/periodic/boot && \
-    chmod -R +x /etc/periodic/boot
-
-#Designer Information
-LABEL maintainer="ibPhantom <admin@zachk.dev>" \
+# Designer Information
+LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.description="A containerized version of OpenVote" \
       org.label-schema.version="0.1.1" \
       org.label-schema.build-date="2023-05-22" \
@@ -47,5 +40,6 @@ ENV PORT 8000
 ENV NEXT_TELEMETRY_DISABLED 1
 EXPOSE 8000
 
-WORKDIR /VOTE
+WORKDIR /
 CMD ["python3", "/VOTE/start.py"]
+WORKDIR /VOTE
