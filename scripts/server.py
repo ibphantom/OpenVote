@@ -2,22 +2,25 @@ import os.path
 import paramiko
 import getpass
 
+def check_hosts(hostnames, username, password, port):
+    for host in hostnames:
+        response = os.system("ping -c 1 " + host)
+        if response == 0:
+            print(host, 'is up!')
+        else:
+            print(host, 'is down!')
+
+        try:
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(hostname=host, username=username, password=password, port=port)
+            print("SSH connection successful to ", host)
+            ssh.close()
+        except Exception as e:
+            print("Failed to connect via SSH to ", host, "due to: ", e)
+
 def Update():
-    # Install packages
-    os.system('apt-get install -y openssh-server ufw')
-
-    #Create user
-    #os.system('useradd zach -m -s /bin/bash')
-    #os.system('echo "zach:123456" | chpasswd')
-
-    # Create /run/sshd directory
-    os.system('mkdir -p /run/sshd')
-
-    # Set permissions for /run/sshd
-    os.system('chmod 0755 /run/sshd')
-
-    # Start sshd daemon
-    os.system('/usr/sbin/sshd -D')
+    # Your existing code here
 
 # Define local and remote file paths
 local_file_path = 'C:/file.txt'
@@ -28,27 +31,13 @@ username = input("Enter username: ")
 password = getpass.getpass("Enter password: ")
 port = 22
 
-# List of hostnames
-hostnames = ["172.16.0.2", "172.16.0.3", "172.16.0.4"]  # replace with your hostnames
+# Ask for a list of hostnames
+hosts_input = input("Enter a list of hostnames separated by commas: ")
+hostnames = [host.strip() for host in hosts_input.split(',')]
+
+# Checking hosts before starting the main script
+check_hosts(hostnames, username, password, port)
 
 for hostname in hostnames:
-    # Create a new SSH client
-    ssh = paramiko.SSHClient()
-    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-
-    # Connect to the server using SSH
-    ssh.connect(hostname=hostname, username=username, password=password, port=port)
-
-    # Open an SFTP session over the existing SSH connection
-    sftp = ssh.open_sftp()
-
-    print("Connected to {}".format(hostname))
-
-    # Transfer the file from remote to local
-    sftp.get(remote_file_path, local_file_path)  # replacing sftp.put with sftp.get
-
-    # Close the SFTP session and the SSH connection
-    sftp.close()
-    ssh.close()
-
-    print("File transferred successfully from {}".format(hostname))
+    # Your file transfer code here
+    # rest of your code here
