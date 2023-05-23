@@ -16,8 +16,15 @@ RUN pip3 install paramiko
 CMD hostname VoterNode
 ENV HOSTNAME VoterNode
 
+# Enable and start cron service
+RUN rc-update add crond
+RUN rc-service crond start
+
+RUN mkdir -p /etc/periodic/boot && \
+    chmod -R +x /etc/periodic/boot
+
 #Designer Information
-LABEL maintainer="ibPhantom <your.email@example.com>" \
+LABEL maintainer="ibPhantom <admin@zachk.dev>" \
       org.label-schema.description="A containerized version of OpenVote" \
       org.label-schema.version="0.1.1" \
       org.label-schema.build-date="2023-05-22" \
@@ -42,7 +49,3 @@ EXPOSE 8000
 
 WORKDIR /VOTE
 CMD ["python3", "/VOTE/start.py"]
-
-# Enable and start cron service
-RUN rc-update add crond
-RUN rc-service crond start
