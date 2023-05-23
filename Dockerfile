@@ -1,5 +1,5 @@
 # Operating System
-FROM rockylinux/rockylinux:8-minimal
+FROM rockylinux/rockylinux:8
 # Install Python and other dependencies
 RUN dnf -y install python3 python3-pip nano && \
     ln -s /usr/bin/clear /usr/bin/cls
