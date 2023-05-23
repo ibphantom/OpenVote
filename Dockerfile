@@ -10,15 +10,14 @@ RUN apt-get update && \
 RUN pip install pycrypto
 RUN pip install pycryptodome
 RUN pip install paramiko
-RUN pip install getpass
 CMD hostname
 ENV HOSTNAME VoterNode
 
 #Designer Information
 LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.description="A containerized version of OpenVote" \
-      org.label-schema.version="0.0.1" \
-      org.label-schema.build-date="2023-05-12" \
+      org.label-schema.version="0.1.1" \
+      org.label-schema.build-date="2023-05-22" \
       org.opencontainers.image.source="https://github.com/ibphantom/OpenVote/"
       
 WORKDIR /VOTE
