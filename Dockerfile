@@ -1,7 +1,7 @@
 # Operating System
 FROM rockylinux/rockylinux:8
-# Install Python and other dependencies
-RUN dnf -y install python3 python3-pip nano && \
+# Install Python, pip, autoconf, and other dependencies
+RUN dnf -y install python3 python3-pip nano autoconf gcc && \
     ln -s /usr/bin/clear /usr/bin/cls
 
 # Upgrade pip
@@ -40,4 +40,3 @@ EXPOSE 8000
 
 WORKDIR /VOTE
 CMD ["python3", "/VOTE/start.py"]
-
