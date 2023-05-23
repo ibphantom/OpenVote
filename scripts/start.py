@@ -1,3 +1,5 @@
+# Your Python script
+
 import subprocess
 import sys
 import os
@@ -12,11 +14,12 @@ while True:
     except EOFError:
         print("Error: End of input reached unexpectedly. Please try again.")
 
-# Create a cron job to start vote.py on boot if the device is a client
+# Create a script to start vote.py on boot if the device is a client
 if device_type.lower() == "client":
-    cron_job = '@reboot /bin/python3 /VOTE/vote.py >> /path/to/logfile.log 2>&1'
-    cron_command = f'(crontab -l ; echo "{cron_job}") | crontab -'
-    os.system(cron_command)
+    with open('/etc/periodic/boot/vote', 'w') as f:
+        f.write('#!/bin/sh\n')
+        f.write('/usr/bin/python3 /VOTE/vote.py >> /path/to/logfile.log 2>&1\n')
+    os.chmod('/etc/periodic/boot/vote', 0o755)
 
 if device_type.lower() == "server":
     print("This device is a server.")
