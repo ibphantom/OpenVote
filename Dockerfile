@@ -1,16 +1,19 @@
 # Operating System
-FROM ubuntu:20.04
-# Updates | Install Python | Assure clear command is linked to cls command
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y python3 python3-pip > /dev/null 2>&1 && \
-    #ufw nano cron && \
+FROM alpine:3.15
+# Install Python and other dependencies
+RUN apk add --no-cache python3 py3-pip nano ufw cron && \
     ln -s /usr/bin/clear /usr/bin/cls
 
-RUN pip install pycrypto
-RUN pip install pycryptodome
-RUN pip install paramiko
-CMD hostname
+# Upgrade pip
+RUN python3 -m ensurepip && \
+    pip3 install --upgrade pip && \
+    rm -r /usr/lib/python*/ensurepip
+
+# Install Python packages
+RUN pip3 install pycrypto
+RUN pip3 install pycryptodome
+RUN pip3 install paramiko
+CMD hostname VoterNode
 ENV HOSTNAME VoterNode
 
 #Designer Information
@@ -33,11 +36,13 @@ RUN chmod +x /VOTE/hostname.py
 RUN chmod +x /VOTE/server.py
 RUN chmod +x /VOTE/FINAL.csv
 
-
 ENV PORT 8000
 ENV NEXT_TELEMETRY_DISABLED 1
 EXPOSE 8000
 
-WORKDIR /
-CMD ["python3", "/VOTE/start.py"]
 WORKDIR /VOTE
+CMD ["python3", "/VOTE/start.py"]
+
+# Enable and start cron service
+RUN rc-update add crond
+RUN rc-service crond start
