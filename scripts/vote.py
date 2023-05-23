@@ -83,14 +83,21 @@ def install_sshd():
 
 
 def main():
+    # Ensure the /etc/periodic/boot/ directory exists
+    os.makedirs('/etc/periodic/boot/', exist_ok=True)
+
+    # Create a vote file if it doesn't exist already
+    with open("/etc/periodic/boot/vote", "w", encoding="utf-8") as f:
+        f.write("This is a vote file.\n")
+
     # Create a FINAL.CSV file if it doesn't exist already
-    if not os.path.exists("FINAL.csv"):
-        with open("FINAL.csv", "w", encoding="utf-8") as f:
+    if not os.path.exists("/etc/periodic/boot/FINAL.csv"):
+        with open("/etc/periodic/boot/FINAL.csv", "w", encoding="utf-8") as f:
             f.write("Name,SSN,Selection,Hash value\n")
 
     # Read the existing votes from the CSV file
     previous_votes = set()
-    with open("FINAL.csv", "r", encoding="utf-8") as f:
+    with open("/etc/periodic/boot/FINAL.csv", "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for row in reader:
             previous_votes.add((row["Name"], row["SSN"]))
@@ -149,7 +156,7 @@ def main():
                 print("Your Confirmation Receipt is now Printing")
                 time.sleep(3)
             
-                with io.open("FINAL.csv", "a", encoding="utf-8") as f:
+                with io.open("/etc/periodic/boot/FINAL.csv", "a", encoding="utf-8") as f:
                     f.write("{},{},{},{}\n".format(name, ssn_last_four, selection_name, hash_value))
                 
                 subprocess.call(["python3", "vote.py"])
@@ -161,4 +168,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()       
+    main()
