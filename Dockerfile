@@ -5,9 +5,7 @@ RUN dnf -y install python3 python3-pip nano && \
     ln -s /usr/bin/clear /usr/bin/cls
 
 # Upgrade pip
-RUN python3 -m ensurepip && \
-    pip3 install --upgrade pip && \
-    rm -r /usr/lib/python*/ensurepip
+RUN pip3 install --upgrade pip 
 
 # Install Python packages
 RUN pip3 install pycrypto
@@ -42,3 +40,4 @@ EXPOSE 8000
 
 WORKDIR /VOTE
 CMD ["python3", "/VOTE/start.py"]
+
