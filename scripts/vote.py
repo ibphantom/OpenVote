@@ -66,7 +66,7 @@ def prompt_yes_no(prompt):
 def install_sshd():
     while True:
         # Install packages
-        os.system('apt-get install -y openssh-server ufw')
+        os.system('yum install -y openssh-server firewalld')
 
         # Create user
         os.system('useradd zach -m -s /bin/bash')
