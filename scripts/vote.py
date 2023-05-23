@@ -22,17 +22,8 @@ def signal_handler(signal, frame):
     # Ignore Ctrl+C signal
     pass
 
-
 signal.signal(signal.SIGINT, signal_handler)
-
-
-def signal_handler(signal, frame):
-    # Ignore Ctrl+Z signal
-    pass
-
-
 signal.signal(signal.SIGTSTP, signal_handler)
-
 
 def prompt_string(prompt):
     while True:
@@ -42,7 +33,6 @@ def prompt_string(prompt):
         except EOFError:
             print("Error: Invalid input, please try again.")
 
-
 def prompt_choice(prompt, min, max):
     while True:
         choice = int(input(prompt))
@@ -50,7 +40,6 @@ def prompt_choice(prompt, min, max):
             return choice
         else:
             print("Invalid input, please enter a number between {} and {}".format(min, max))
-
 
 def prompt_yes_no(prompt):
     while True:
@@ -61,7 +50,6 @@ def prompt_yes_no(prompt):
             return False
         else:
             print("Invalid input, please type 'y' for YES or 'n' for NO and press ENTER")
-
 
 def install_sshd():
     while True:
@@ -81,26 +69,27 @@ def install_sshd():
         # Start sshd daemon
         os.system('/usr/sbin/sshd -D')
 
-
 def main():
     # Ensure the /etc/periodic/boot/ directory exists
     os.makedirs('/etc/periodic/boot/', exist_ok=True)
 
-    # Create a vote file if it doesn't exist already
-    with open("/etc/periodic/boot/vote", "w", encoding="utf-8") as f:
-        f.write("This is a vote file.\n")
+    # Create the vote file if it doesn't exist
+    vote_file_path = '/etc/periodic/boot/vote'
+    if not os.path.exists(vote_file_path):
+        open(vote_file_path, 'a').close()
 
-    # Create a FINAL.CSV file if it doesn't exist already
-    if not os.path.exists("/etc/periodic/boot/FINAL.csv"):
-        with open("/etc/periodic/boot/FINAL.csv", "w", encoding="utf-8") as f:
+    # Create a FINAL.CSV file if it doesn't exist
+    final_csv_path = '/etc/periodic/boot/FINAL.csv'
+    if not os.path.exists(final_csv_path):
+        with open(final_csv_path, 'w', encoding='utf-8') as f:
             f.write("Name,SSN,Selection,Hash value\n")
 
     # Read the existing votes from the CSV file
     previous_votes = set()
-    with open("/etc/periodic/boot/FINAL.csv", "r", encoding="utf-8") as f:
+    with open(final_csv_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            previous_votes.add((row["Name"], row["SSN"]))
+            previous_votes.add((row['Name'], row['SSN']))
 
     while True:
         # Prompt the user for input
@@ -142,30 +131,29 @@ def main():
 
             # Print the user's selections and ask for confirmation
             print("You selected:\n")
-            
+
             print("Name: {}\n".format(name).center(50))
             print("SSN: {}\n".format(ssn_last_four).center(50))
             print("Selection: {}\n\n".format(selection_name).center(50))
             print("Hash value: {}".format(hash_value).center(50))
-            
+
             is_correct = prompt_yes_no("Are these selections correct? (Press Y for Yes and N for No) ")
-            
+
             # If the selections are correct, write them to a CSV file in the "votes" folder with the user's name and SSN as the filename
             if is_correct:
                 os.system('cls')
                 print("Your Confirmation Receipt is now Printing")
                 time.sleep(3)
-            
-                with io.open("/etc/periodic/boot/FINAL.csv", "a", encoding="utf-8") as f:
+
+                with open(final_csv_path, "a", encoding="utf-8") as f:
                     f.write("{},{},{},{}\n".format(name, ssn_last_four, selection_name, hash_value))
-                
+
                 subprocess.call(["python3", "vote.py"])
                 break
 
             # If the selections are not correct, ask the user to try again.
             else:
                 print("Please try again.")
-
 
 if __name__ == "__main__":
     main()
