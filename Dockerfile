@@ -1,7 +1,7 @@
 # Operating System
-FROM alpine:3.15
+FROM rockylinux/rockylinux:8-minimal
 # Install Python and other dependencies
-RUN apk add --no-cache python3 py3-pip nano && \
+RUN dnf -y install python3 python3-pip nano && \
     ln -s /usr/bin/clear /usr/bin/cls
 
 # Upgrade pip
@@ -40,6 +40,5 @@ ENV PORT 8000
 ENV NEXT_TELEMETRY_DISABLED 1
 EXPOSE 8000
 
-WORKDIR /
-CMD ["python3", "/VOTE/start.py"]
 WORKDIR /VOTE
+CMD ["python3", "/VOTE/start.py"]
