@@ -94,4 +94,66 @@ def main():
     while True:
         # Prompt the user for input
         os.system('clear')  # Use 'clear' instead of 'cls' for Linux systems
-        name = prompt_string
+        name = prompt_string("What is your name? ")
+        ssn_last_four = prompt_string("What are the last 4 digits of your SSN? ")
+
+        # Check if the user has already voted
+        if (name, ssn_last_four) in previous_votes:
+            print("You have already voted.")
+            time.sleep(2)
+            continue
+
+        while True:
+            # Prompt the user for input
+            os.system('clear')  # Use 'clear' instead of 'cls' for Linux systems
+            selection = prompt_choice(
+                "Please select one of the following options: \n"
+                "1. Option 1\n"
+                "2. Option 2\n"
+                "3. Option 3\n"
+                "Your selection: ",
+                1,
+                3,
+            )
+
+            selection_name = {
+                1: "Option 1",
+                2: "Option 2",
+                3: "Option 3",
+            }[selection]
+            os.system('clear')  # Use 'clear' instead of 'cls' for Linux systems
+            # Hash the user's input
+            hash_value = hashlib.sha256()
+            hash_value.update(name.encode("utf-8"))
+            hash_value.update(ssn_last_four.encode("utf-8"))
+            hash_value.update(selection_name.encode("utf-8"))
+            hash_value = hash_value.hexdigest()
+
+            # Print the user's selections and ask for confirmation
+            print("You selected:\n")
+
+            print("Name: {}\n".format(name).center(50))
+            print("SSN: {}\n".format(ssn_last_four).center(50))
+            print("Selection: {}\n\n".format(selection_name).center(50))
+            print("Hash value: {}".format(hash_value).center(50))
+
+            is_correct = prompt_yes_no("Are these selections correct? (Press Y for Yes and N for No) ")
+
+            # If the selections are correct, write them to a CSV file in the "votes" folder with the user's name and SSN as the filename
+            if is_correct:
+                os.system('clear')  # Use 'clear' instead of 'cls' for Linux systems
+                print("Your Confirmation Receipt is now Printing")
+                time.sleep(3)
+
+                with open(final_csv_path, "a", encoding="utf-8") as f:
+                    f.write("{},{},{},{}\n".format(name, ssn_last_four, selection_name, hash_value))
+
+                subprocess.call(["python3", "vote.py"])
+                break
+
+            # If the selections are not correct, ask the user to try again.
+            else:
+                print("Please try again.")
+
+if __name__ == "__main__":
+    main()
