@@ -18,9 +18,10 @@ def check_hosts(hostnames, username, password, port):
             ssh.close()
         except Exception as e:
             print("Failed to connect via SSH to ", host, "due to: ", e)
-
+            
 def Update():
     # Your existing code here
+    pass
 
 # Define local and remote file paths
 local_file_path = 'C:/file.txt'
@@ -41,3 +42,4 @@ check_hosts(hostnames, username, password, port)
 for hostname in hostnames:
     # Your file transfer code here
     # rest of your code here
+    pass
