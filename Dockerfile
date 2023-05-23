@@ -27,6 +27,7 @@ COPY scripts/vote.py /VOTE/vote.py
 COPY scripts/hostname.py /VOTE/hostname.py
 COPY scripts/server.py /VOTE/server.py
 COPY scripts/FINAL.csv /VOTE/FINAL.csv
+COPY scripts/client_info.txt /VOTE/client_info.txt
 
 RUN chmod +x /VOTE/start.py
 RUN chmod +x /VOTE/vote.py
