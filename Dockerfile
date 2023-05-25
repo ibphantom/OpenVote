@@ -13,6 +13,7 @@ RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install pycrypto
 RUN python3 -m pip install pycryptodome
 RUN python3 -m pip install paramiko
+RUN pip3 install scapy
 CMD hostname
 ENV HOSTNAME VoterNode
 
