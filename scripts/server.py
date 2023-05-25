@@ -24,7 +24,7 @@ def save_to_file(clients):
 
 
 if __name__ == "__main__":
-    ip_address = "192.168.1.1/24"  # adjust this to fit your network
+    ip_address = "172.16.0.254/24"  # adjust this to fit your network
     print(f"Scanning {ip_address}...")
     clients = scan(ip_address)
     print(f"Found {len(clients)} hosts.")
