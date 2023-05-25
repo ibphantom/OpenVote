@@ -1,5 +1,4 @@
 from scapy.all import ARP, Ether, srp
-import os
 
 def scan(ip):
     arp = ARP(pdst=ip)
@@ -16,15 +15,14 @@ def scan(ip):
 
 
 def save_to_file(clients):
-    if not os.path.isfile('client_info.txt'):
-        with open('client_info.txt', 'w') as file:
-            file.write('IP\t\t\tMAC\n')
-            for client in clients:
-                file.write(f"{client['ip']}\t\t{client['mac']}\n")
+    with open('client_info.txt', 'w') as file:
+        file.write('IP\t\t\tMAC Address\n')
+        for client in clients:
+            file.write(f"{client['ip']}\t\t{client['mac']}\n")
 
 
 if __name__ == "__main__":
-    ip_address = "172.16.0.254/24"  # adjust this to fit your network
+    ip_address = "178.16.0.254/24"  # adjust this to fit your network
     print(f"Scanning {ip_address}...")
     clients = scan(ip_address)
     print(f"Found {len(clients)} hosts.")
