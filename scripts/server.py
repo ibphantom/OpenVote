@@ -56,6 +56,6 @@ if __name__ == "__main__":
     print("Results saved to client_info.txt")
 
     for client in clients:
-        if 'VoteBooth' in client['hostname']:
-            print(f"Found VoteBooth host: {client['hostname']}")
+        if 'OpenVote' in client['hostname']:
+            print(f"Found OpenVote host: {client['hostname''ip']}")
             sftp_get_file(client['ip'], username, password, '/VOTE/FINAL.CSV', f"{client['hostname']}_FINAL.CSV")
