@@ -1,4 +1,5 @@
 from scapy.all import ARP, Ether, srp
+import socket
 
 def scan(ip):
     arp = ARP(pdst=ip)
@@ -9,20 +10,25 @@ def scan(ip):
     clients = []
 
     for sent, received in result:
-        clients.append({'ip': received.psrc, 'mac': received.hwsrc})
+        try:
+            hostname = socket.gethostbyaddr(received.psrc)[0]
+        except socket.herror:  # unable to resolve
+            hostname = ''
+        
+        clients.append({'ip': received.psrc, 'mac': received.hwsrc, 'hostname': hostname})
 
     return clients
 
 
 def save_to_file(clients):
     with open('client_info.txt', 'w') as file:
-        file.write('IP\t\t\tMAC Address\n')
+        file.write('IP\t\t\tMAC Address\t\tHostname\n')
         for client in clients:
-            file.write(f"{client['ip']}\t\t{client['mac']}\n")
+            file.write(f"{client['ip']}\t\t{client['mac']}\t\t{client['hostname']}\n")
 
 
 if __name__ == "__main__":
-    ip_address = "178.16.0.254/24"  # adjust this to fit your network
+    ip_address = "192.168.1.1/24"  # adjust this to fit your network
     print(f"Scanning {ip_address}...")
     clients = scan(ip_address)
     print(f"Found {len(clients)} hosts.")
