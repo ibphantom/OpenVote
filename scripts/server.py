@@ -1,64 +1,32 @@
-import socket
-import time
-import paramiko
+from scapy.all import ARP, Ether, srp
+import os
 
-def get_client_info():
-    host = socket.gethostname()
-    ip = socket.gethostbyname(host)
-    return host, ip
+def scan(ip):
+    arp = ARP(pdst=ip)
+    ether = Ether(dst="ff:ff:ff:ff:ff:ff")
+    packet = ether/arp
+    result = srp(packet, timeout=3, verbose=0)[0]
 
-def write_client_info_to_file(filename, client_info):
-    with open(filename, 'a') as file:
-        file.write(f'{client_info[0]} {client_info[1]}\n')
-
-def read_client_info_from_file(filename):
     clients = []
-    with open(filename, 'r') as file:
-        for line in file:
-            client = line.strip().split()
-            if len(client) == 2:
-                clients.append(client)
+
+    for sent, received in result:
+        clients.append({'ip': received.psrc, 'mac': received.hwsrc})
+
     return clients
 
-def connect_and_sftp_to_clients(clients):
-    server_host = 'SERVER_HOST'  # Replace with the server's IP or hostname
-    server_port = 22  # Replace with the server's SSH port
-    username = 'YOUR_USERNAME'  # Replace with your SSH username
-    private_key_path = 'PATH_TO_PRIVATE_KEY'  # Replace with the path to your private key file
 
-    for client in clients:
-        client_host = client[1]  # Assuming the IP address is stored in the second element
-        try:
-            # Connect to the client using SFTP
-            transport = paramiko.Transport((client_host, server_port))
-            private_key = paramiko.RSAKey.from_private_key_file(private_key_path)
-            transport.connect(username=username, pkey=private_key)
-            sftp = transport.open_sftp()
-            
-            # Perform SFTP operations with the client
-            # Add your code here to interact with the client's SFTP server
-            
-            sftp.close()
-            transport.close()
-            
-            print(f"Connected and performed SFTP operations with {client_host}")
-        except paramiko.AuthenticationException:
-            print(f"Authentication failed for {client_host}")
-        except paramiko.SSHException as e:
-            print(f"SSH connection failed for {client_host}: {str(e)}")
-        except Exception as e:
-            print(f"Error connecting to {client_host}: {str(e)}")
+def save_to_file(clients):
+    if not os.path.isfile('client_info.txt'):
+        with open('client_info.txt', 'w') as file:
+            file.write('IP\t\t\tMAC\n')
+            for client in clients:
+                file.write(f"{client['ip']}\t\t{client['mac']}\n")
 
-def main():
-    filename = 'client_info.txt'  # Change this to your desired filename
-    clients = read_client_info_from_file(filename)
-    current_time = time.strftime('%H:%M')  # Get the current time in HH:MM format
 
-    # Set the desired time to initiate the SFTP connections (in HH:MM format)
-    target_time = '12:00'
-
-    if current_time == target_time:
-        connect_and_sftp_to_clients(clients)
-
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    ip_address = "192.168.1.1/24"  # adjust this to fit your network
+    print(f"Scanning {ip_address}...")
+    clients = scan(ip_address)
+    print(f"Found {len(clients)} hosts.")
+    save_to_file(clients)
+    print("Results saved to client_info.txt")
