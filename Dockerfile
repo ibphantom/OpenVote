@@ -1,16 +1,18 @@
 # Operating System
-FROM rockylinux/rockylinux:8
+FROM ubuntu:latest
+
 # Install Python, pip, autoconf, and other dependencies
-RUN dnf -y install python3 python3-pip nano autoconf gcc python3-devel && \
+RUN apt-get update && \
+    apt-get install -y python3 python3-pip nano autoconf gcc python3-dev && \
     ln -s /usr/bin/clear /usr/bin/cls
 
 # Upgrade pip
-RUN pip3 install --upgrade pip 
+RUN python3 -m pip install --upgrade pip 
 
 # Install Python packages
-RUN pip3 install pycrypto
-RUN pip3 install pycryptodome
-RUN pip3 install paramiko
+RUN python3 -m pip install pycrypto
+RUN python3 -m pip install pycryptodome
+RUN python3 -m pip install paramiko
 CMD hostname
 ENV HOSTNAME VoterNode
 
