@@ -1,6 +1,7 @@
 from scapy.all import ARP, Ether, srp
 import paramiko
 import socket
+import csv
 
 def scan(ip):
     arp = ARP(pdst=ip)
@@ -36,12 +37,20 @@ def sftp_get_file(ip, username, password, remote_file_path, local_file_path):
         sftp = paramiko.SFTPClient.from_transport(transport)
         sftp.get(remote_file_path, local_file_path)
 
+        # Read the content of the downloaded file and append it to VOTES.CSV
+        with open(local_file_path, 'r') as source_file:
+            reader = csv.reader(source_file)
+            with open('VOTES.CSV', 'a') as destination_file:
+                writer = csv.writer(destination_file)
+                for row in reader:
+                    writer.writerow(row + [ip])
+
         sftp.close()
         transport.close()
 
-        print(f"Downloaded {remote_file_path} from {ip}")
+        print(f"Downloaded and appended {remote_file_path} from {ip}")
     except Exception as e:
-        print(f"Failed to download {remote_file_path} from {ip}. Error: {str(e)}")
+        print(f"Failed to download and append {remote_file_path} from {ip}. Error: {str(e)}")
 
 
 if __name__ == "__main__":
@@ -56,6 +65,6 @@ if __name__ == "__main__":
     print("Results saved to client_info.txt")
 
     for client in clients:
-        if 'OpenVote' in client['hostname']:
-            print(f"Found OpenVote host: {client['hostname''ip']}")
+        if 'openvote' in client['hostname']:
+            print(f"Found openvote host: {client['hostname']}")
             sftp_get_file(client['ip'], username, password, '/VOTE/FINAL.CSV', f"{client['hostname']}_FINAL.CSV")
