@@ -161,8 +161,7 @@ def main():
                 with open(final_csv_path, "a", encoding="utf-8") as f:
                     f.write("{},{},{},{}\n".format(name, ssn_last_four, selection_name, hash_value))
 
-                subprocess.call(["python3", "vote.py"])
-                break
+                break  # Exit the inner while loop
 
             # If the selections are not correct, ask the user to try again.
             else:
