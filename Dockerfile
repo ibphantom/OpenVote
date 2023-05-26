@@ -3,7 +3,7 @@ FROM ubuntu:latest
 
 # Install Python, pip, autoconf, and other dependencies
 RUN apt-get update && \
-    apt-get install -y python3 python3-pip nano autoconf gcc python3-dev && \
+    apt-get install -y python3 python3-pip nano autoconf ufw openssh-server && \
     ln -s /usr/bin/clear /usr/bin/cls
 
 # Upgrade pip
