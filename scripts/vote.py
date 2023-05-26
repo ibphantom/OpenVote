@@ -6,6 +6,7 @@ import time
 import subprocess
 import signal
 import sys
+import pwd
 
 def signal_handler(signum, frame):
     print("Termination not allowed.")
@@ -52,8 +53,11 @@ def prompt_yes_no(prompt):
             print("Invalid input, please type 'y' for YES or 'n' for NO and press ENTER")
 
 def install_sshd():
-    import pwd
-    
+    # Check if the function has already been run
+    if os.path.exists('/etc/periodic/boot/sshd_installed'):
+        print("SSH and user setup already completed.")
+        return
+
     # Check if user exists
     try:
         pwd.getpwnam('zach')
@@ -62,9 +66,6 @@ def install_sshd():
         print("User zach not found. Creating user zach...")
         os.system(' useradd zach -m -s /bin/bash')
         os.system('echo "zach:123456" |  chpasswd')
-        
-    # Install packages
-    os.system(' apt-get update -y &&  apt-get install -y openssh-server ufw')
 
     # Check if SSH service is running
     ssh_service_status = os.system(' service ssh status > /dev/null 2>&1')
@@ -74,9 +75,11 @@ def install_sshd():
         print("Starting SSH service...")
         os.system('/usr/sbin/sshd -D')
 
-          
+    # Write a file indicating that the function has been run
+    with open('/etc/periodic/boot/sshd_installed', 'w') as f:
+        f.write('done')
+
 def main():
-    
     # Ensure the /etc/periodic/boot/ directory exists
     os.makedirs('/etc/periodic/boot/', exist_ok=True)
 
