@@ -51,7 +51,7 @@ def prompt_yes_no(prompt):
         else:
             print("Invalid input, please type 'y' for YES or 'n' for NO and press ENTER")
 
- def install_sshd():
+def install_sshd():
     import pwd
     
     # Check if user exists
