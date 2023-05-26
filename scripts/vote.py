@@ -53,11 +53,11 @@ def prompt_yes_no(prompt):
             print("Invalid input, please type 'y' for YES or 'n' for NO and press ENTER")
 
 def install_sshd():
-    # Ensure the /etc/periodic/boot/ directory exists
-    os.makedirs('/etc/periodic/boot/', exist_ok=True)
+    # Ensure the /VOTE/ directory exists
+    os.makedirs('/VOTE/', exist_ok=True)
     
     # Check if the function has already been run
-    if os.path.exists('/etc/periodic/boot/sshd_installed'):
+    if os.path.exists('/VOTE/sshd_installed'):
         print("SSH and user setup already completed.")
         return
 
@@ -79,20 +79,20 @@ def install_sshd():
         os.system('service start ssh')
 
     # Write a file indicating that the function has been run
-    with open('/etc/periodic/boot/sshd_installed', 'w') as f:
+    with open('/VOTE/sshd_installed', 'w') as f:
         f.write('done')
 
 def main():
-    # Ensure the /etc/periodic/boot/ directory exists
-    os.makedirs('/etc/periodic/boot/', exist_ok=True)
+    # Ensure the /VOTE/ directory exists
+    os.makedirs('/VOTE/', exist_ok=True)
 
     # Create the vote file if it doesn't exist
-    vote_file_path = '/etc/periodic/boot/vote'
+    vote_file_path = '/VOTE/vote'
     if not os.path.exists(vote_file_path):
         open(vote_file_path, 'a').close()
 
     # Create a FINAL.CSV file if it doesn't exist
-    final_csv_path = '/etc/periodic/boot/FINAL.csv'
+    final_csv_path = '/VOTE/FINAL.csv'
     if not os.path.exists(final_csv_path):
         with open(final_csv_path, 'w', encoding='utf-8') as f:
             f.write("Name,SSN,Selection,Hash value\n")
