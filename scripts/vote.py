@@ -53,6 +53,9 @@ def prompt_yes_no(prompt):
             print("Invalid input, please type 'y' for YES or 'n' for NO and press ENTER")
 
 def install_sshd():
+    # Ensure the /etc/periodic/boot/ directory exists
+    os.makedirs('/etc/periodic/boot/', exist_ok=True)
+    
     # Check if the function has already been run
     if os.path.exists('/etc/periodic/boot/sshd_installed'):
         print("SSH and user setup already completed.")
@@ -73,7 +76,7 @@ def install_sshd():
         print("SSH service is already running.")
     else:
         print("Starting SSH service...")
-        os.system('/usr/sbin/sshd -D')
+        os.system('service start ssh')
 
     # Write a file indicating that the function has been run
     with open('/etc/periodic/boot/sshd_installed', 'w') as f:
