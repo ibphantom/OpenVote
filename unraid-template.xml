@@ -1,0 +1,10 @@
+<Container>
+  <Name>Open Vote</Name>
+  <Repository>OpenVote</Repository>
+  <WebUI>https://github.com/ibphantom/OpenVote</WebUI>
+  <Support>https://github.com/ibphantom/OpenVote</Support>
+  <Category>Research</Category>
+  <Description>Creating an open source voting system that cannot be tampered with and proves valditity from local to state to federal</Description>
+  <PostArgs>-p 8000:8000</PostArgs>
+  <Config Name="VAR_NAME" Description="Description of the variable." Type="text" DefaultValue="value" Display="always"/>
+</Container>
