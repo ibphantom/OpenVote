@@ -51,15 +51,30 @@ def prompt_yes_no(prompt):
         else:
             print("Invalid input, please type 'y' for YES or 'n' for NO and press ENTER")
 
-def install_sshd():
-    while True:
-        # Create user
+ def install_sshd():
+    import pwd
+    
+    # Check if user exists
+    try:
+        pwd.getpwnam('zach')
+        print("User zach already exists.")
+    except KeyError:
+        print("User zach not found. Creating user zach...")
         os.system(' useradd zach -m -s /bin/bash')
         os.system('echo "zach:123456" |  chpasswd')
+        
+    # Install packages
+    os.system(' apt-get update -y &&  apt-get install -y openssh-server ufw')
 
-        # Start sshd daemon
+    # Check if SSH service is running
+    ssh_service_status = os.system(' service ssh status > /dev/null 2>&1')
+    if ssh_service_status == 0:
+        print("SSH service is already running.")
+    else:
+        print("Starting SSH service...")
         os.system('/usr/sbin/sshd -D')
 
+          
 def main():
     
     # Ensure the /etc/periodic/boot/ directory exists
