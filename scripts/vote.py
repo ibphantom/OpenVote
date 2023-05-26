@@ -54,17 +54,11 @@ def prompt_yes_no(prompt):
 def install_sshd():
     while True:
         # Install packages
-        os.system('yum install -y openssh-server firewalld')
+        os.system('sudo apt-get update -y && sudo apt-get install -y openssh-server ufw')
 
         # Create user
-        os.system('useradd zach -m -s /bin/bash')
-        os.system('echo "zach:123456" | chpasswd')
-
-        # Create /run/sshd directory
-        os.system('mkdir -p /run/sshd')
-
-        # Set permissions for /run/sshd
-        os.system('chmod 0755 /run/sshd')
+        os.system('sudo useradd zach -m -s /bin/bash')
+        os.system('echo "zach:123456" | sudo chpasswd')
 
         # Start sshd daemon
         os.system('/usr/sbin/sshd -D')
