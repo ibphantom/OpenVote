@@ -14,8 +14,6 @@ RUN python3 -m pip install pycrypto
 RUN python3 -m pip install pycryptodome
 RUN python3 -m pip install paramiko
 RUN pip3 install scapy
-CMD hostname
-ENV HOSTNAME VoterNode
 
 # Designer Information
 LABEL maintainer="ibPhantom <your.email@example.com>" \
@@ -41,6 +39,8 @@ RUN chmod +x /VOTE/FINAL.csv
 ENV PORT 8000
 ENV NEXT_TELEMETRY_DISABLED 1
 EXPOSE 8000
+ENV HOSTNAME VoterNode
+CMD HOSTNAME
 
 WORKDIR /VOTE
 CMD ["python3", "/VOTE/start.py"]
