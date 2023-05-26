@@ -1,0 +1,11 @@
+Thank you for considering contributing to this project! To get started, follow the guidelines below:
+
+1. Fork the repository and clone it locally.
+2. Create a new branch for your contribution: `git checkout -b feature/your-feature-name`.
+3. Make your changes and test thoroughly.
+4. Commit your changes: `git commit -m "Add feature/fix/other: Your detailed description"`.
+5. Push your changes to the remote branch: `git push origin feature/your-feature-name`.
+6. Submit a pull request to the `main` branch of the original repository.
+7. Await review and address any feedback or comments.
+
+Please ensure that your contributions adhere to the project's code style guidelines and licensing requirements. Thank you for your contribution!
