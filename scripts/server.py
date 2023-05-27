@@ -55,8 +55,8 @@ def sftp_get_file(ip, username, password, remote_file_path, local_file_path):
 
 if __name__ == "__main__":
     ip_address = "172.16.0.254/24"  # adjust this to fit your network
-    username = ""  # fill in
-    password = ""  # fill in
+    username = "zach"  # fill in
+    password = "123456"  # fill in
 
     print(f"Scanning {ip_address}...")
     clients = scan(ip_address)
@@ -67,4 +67,4 @@ if __name__ == "__main__":
     for client in clients:
         if 'openvote' in client['hostname']:
             print(f"Found openvote host: {client['hostname']}")
-            sftp_get_file(client['ip'], username, password, '/VOTE/FINAL.CSV', f"{client['hostname']}_FINAL.CSV")
+            sftp_get_file(client['ip'], username, password, '/VOTE/FINAL.csv', f"{client['hostname']}_FINAL.csv")
