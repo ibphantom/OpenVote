@@ -4,6 +4,7 @@ import hashlib
 import time
 import signal
 import pwd
+import collections
 
 # A function to handle signals, preventing termination.
 def signal_handler(signum, frame):
@@ -54,7 +55,6 @@ def prompt_yes_no(prompt):
             print("Invalid input, please type 'y' for YES or 'n' for NO and press ENTER")
 
 # Function to install and start SSH service, and create a new user if necessary
-# Function to install and start SSH service, and create a new user if necessary
 def install_sshd():
     os.makedirs('/VOTE/', exist_ok=True)
     if os.path.exists('/VOTE/sshd_installed'):
@@ -80,10 +80,18 @@ def install_sshd():
         print("SSH service is already running.")
     else:
         print("Starting SSH service...")
-        os.system('service start ssh')
+        os.system('service ssh start')
 
     with open('/VOTE/sshd_installed', 'w') as f:
         f.write('done')
+
+# Function to display histogram of vote selections
+def display_histogram():
+    with open('/VOTE/selection_count.txt', 'r', encoding='utf-8') as f:
+        selection_counts = collections.Counter(f.read().splitlines()[1:])  # exclude the header
+
+    for selection, count in selection_counts.items():
+        print("Selection {}: {}".format(selection, '#' * int(count)))
 
 # Main function that handles the voting process
 def main():
@@ -97,11 +105,20 @@ def main():
         with open(final_csv_path, 'w', encoding='utf-8') as f:
             f.write("Hash value\n")  # Only store the hash value
 
+    # New file to record selection counts
+    selection_count_path = '/VOTE/selection_count.txt'
+    if not os.path.exists(selection_count_path):
+        with open(selection_count_path, 'w', encoding='utf-8') as f:
+            f.write("Selection\n")  # Header for the selection file
+
     previous_votes = set()
     with open(final_csv_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
             previous_votes.add(row['Hash value'])
+
+    # Call the histogram display function at the start
+    display_histogram()
 
     while True:
         os.system('clear')
@@ -160,6 +177,10 @@ def main():
 
                 with open(final_csv_path, "a", encoding="utf-8") as f:
                     f.write("{}\n".format(hash_value))
+
+                # Record selection
+                with open(selection_count_path, "a", encoding="utf-8") as f:
+                    f.write("{}\n".format(selection))
 
                 break  
             else:
