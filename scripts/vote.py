@@ -96,9 +96,17 @@ def display_histogram():
         "3": "Option 3"
     }
 
-    for selection, count in selection_counts.items():
-        option_name = option_names.get(selection, "Unknown Option")
-        print("Option {}: {}".format(option_name, '#' * int(count)))
+    with open('/VOTE/selection_count.txt', 'w', encoding='utf-8') as f:
+        f.write("Selection\tCount\n")  # Write the header
+
+        for selection, count in selection_counts.items():
+            option_name = option_names.get(selection, "Unknown Option")
+            f.write("{}\t{}\n".format(option_name, count))  # Write the option name and count to the file
+
+    # Print the updated histogram
+    with open('/VOTE/selection_count.txt', 'r', encoding='utf-8') as f:
+        print(f.read())
+
 
 # Main function that handles the voting process
 def main():
