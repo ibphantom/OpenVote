@@ -1,4 +1,3 @@
-User
 import csv
 import os
 import hashlib
