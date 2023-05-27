@@ -7,9 +7,9 @@ RUN apt-get update && \
     ln -s /usr/bin/clear /usr/bin/cls
 
 #Enable ssh
-RUN ufw allow ssh
-RUN ufw allow 22
-RUN ufw enable
+#RUN ufw allow ssh
+#RUN ufw allow 22
+#RUN ufw enable
 
 # Upgrade pip
 RUN python3 -m pip install --upgrade pip 
