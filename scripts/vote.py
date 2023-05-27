@@ -155,7 +155,7 @@ def main():
 
             if is_correct:
                 os.system('clear')
-                print("Your Confirmation Receipt is now Printing")
+                print("Your Confirmation Receipt is now Printing".center(50))
                 time.sleep(3)
 
                 with open(final_csv_path, "a", encoding="utf-8") as f:
