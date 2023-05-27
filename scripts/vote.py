@@ -65,10 +65,12 @@ def install_sshd():
         print("User zach already exists.")
     except KeyError:
         print("User zach not found. Creating user zach...")
-        os.system(' useradd zach -m -s /bin/bash')
-        os.system('echo "zach:123456" |  chpasswd')
+        # prompt for a password
+        password = prompt_string("Enter a password for the user 'zach':")
+        os.system('useradd zach -m -s /bin/bash')
+        os.system(f'echo "zach:{password}" | chpasswd')
 
-    ssh_service_status = os.system(' service ssh status > /dev/null 2>&1')
+    ssh_service_status = os.system('service ssh status > /dev/null 2>&1')
     if ssh_service_status == 0:
         print("SSH service is already running.")
     else:
