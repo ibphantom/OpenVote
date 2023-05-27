@@ -54,6 +54,7 @@ def prompt_yes_no(prompt):
             print("Invalid input, please type 'y' for YES or 'n' for NO and press ENTER")
 
 # Function to install and start SSH service, and create a new user if necessary
+# Function to install and start SSH service, and create a new user if necessary
 def install_sshd():
     os.makedirs('/VOTE/', exist_ok=True)
     if os.path.exists('/VOTE/sshd_installed'):
@@ -69,6 +70,10 @@ def install_sshd():
         password = prompt_string("Enter a password for the user 'zach':")
         os.system('useradd zach -m -s /bin/bash')
         os.system(f'echo "zach:{password}" | chpasswd')
+
+    # Prohibit root login via SSH
+    print("Configuring SSH to disallow root login...")
+    os.system('sed -i "s/^#*PermitRootLogin.*/PermitRootLogin prohibit-password/g" /etc/ssh/sshd_config')
 
     ssh_service_status = os.system('service ssh status > /dev/null 2>&1')
     if ssh_service_status == 0:
