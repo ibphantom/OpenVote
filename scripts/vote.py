@@ -84,7 +84,7 @@ def install_sshd():
 
     with open('/VOTE/sshd_installed', 'w') as f:
         f.write('done')
-        
+
 # Function to display histogram of vote selections
 def display_histogram():
     selection_counts = collections.defaultdict(int)
@@ -94,21 +94,23 @@ def display_histogram():
         "3": "Option 3"
     }
 
-    with open('/VOTE/selection_count.txt', 'r', encoding='utf-8') as f:
-        lines = f.readlines()
-        for line in lines[1:]:  # Exclude the header line
-            selection, count = line.strip().split('\t')
+    with open('/VOTE/selection_count.csv', 'r', encoding='utf-8') as f:
+        reader = csv.reader(f)
+        next(reader)  # Skip the header line
+        for row in reader:
+            selection, count = row
             selection_counts[selection] = int(count)
 
     for selection, count in selection_counts.items():
         option_name = option_names.get(selection, "Unknown Option")
         print("Selection {}: {} - Count: {}".format(option_name, '#' * count, count))
 
-    with open('/VOTE/selection_count.txt', 'w', encoding='utf-8') as f:
-        f.write("Selection\tCount\n")  # Write the header
+    with open('/VOTE/selection_count.csv', 'w', encoding='utf-8', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(["Selection", "Count"])  # Write the header
 
         for selection, count in selection_counts.items():
-            f.write("{}\t{}\n".format(selection, count))
+            writer.writerow([selection, count])
 
 
 
