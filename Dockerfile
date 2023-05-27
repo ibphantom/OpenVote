@@ -5,7 +5,7 @@ FROM ubuntu:latest
 RUN apt-get update && \
     apt-get install -y python3 python3-pip nano autoconf ufw openssh-server && \
     ln -s /usr/bin/clear /usr/bin/cls
-    ln -s /usr/bin/python3 /usr/bin/p
+    ln -s /usr/bin/python3 /usr/bin/pyt
 
 #Enable ssh
 RUN ufw allow ssh
