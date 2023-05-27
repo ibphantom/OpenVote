@@ -84,6 +84,7 @@ def install_sshd():
 
     with open('/VOTE/sshd_installed', 'w') as f:
         f.write('done')
+        
 
 # Function to display histogram of vote selections
 def display_histogram():
@@ -114,7 +115,9 @@ def display_histogram():
         writer.writerow(["Option", "Count"])  # Write the header
 
         for selection, count in selection_counts.items():
-            writer.writerow([selection, count + 1])
+            option_name = option_names.get(selection, "Unknown Option")
+            writer.writerow([option_name, count])
+
 
             
 # Main function that handles the voting process
