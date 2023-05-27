@@ -87,25 +87,29 @@ def install_sshd():
         
 # Function to display histogram of vote selections
 def display_histogram():
-    with open('/VOTE/selection_count.txt', 'r', encoding='utf-8') as f:
-        selection_counts = collections.Counter(f.read().splitlines()[1:])  # exclude the header
-
+    selection_counts = collections.defaultdict(int)
     option_names = {
         "1": "Option 1",
         "2": "Option 2",
         "3": "Option 3"
     }
 
+    with open('/VOTE/selection_count.txt', 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+        for line in lines[1:]:  # Exclude the header line
+            selection, count = line.strip().split('\t')
+            selection_counts[selection] = int(count)
+
+    for selection, count in selection_counts.items():
+        option_name = option_names.get(selection, "Unknown Option")
+        print("Selection {}: {} - Count: {}".format(option_name, '#' * count, count))
+
     with open('/VOTE/selection_count.txt', 'w', encoding='utf-8') as f:
         f.write("Selection\tCount\n")  # Write the header
 
         for selection, count in selection_counts.items():
-            option_name = option_names.get(selection, "Unknown Option")
-            f.write("{}\t{}\n".format(option_name, count))  # Write the option name and count to the file
+            f.write("{}\t{}\n".format(selection, count))
 
-    # Print the updated histogram
-    with open('/VOTE/selection_count.txt', 'r', encoding='utf-8') as f:
-        print(f.read())
 
 
 # Main function that handles the voting process
