@@ -40,7 +40,7 @@ def sftp_get_file(ip, username, password, remote_file_path, local_file_path):
         # Read the content of the downloaded file and append it to VOTES.CSV
         with open(local_file_path, 'r') as source_file:
             reader = csv.reader(source_file)
-            with open('VOTES.CSV', 'a') as destination_file:
+            with open('VOTES.csv', 'a') as destination_file:
                 writer = csv.writer(destination_file)
                 for row in reader:
                     writer.writerow(row + [ip])
