@@ -3,7 +3,7 @@ services:
   app:
     image: Open Vote
     ports:
-      - "80:80"
+      - "8000:8000"
     environment:
       - VAR_NAME=value
     volumes:
