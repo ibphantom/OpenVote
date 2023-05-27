@@ -1,17 +1,15 @@
 import csv
 import os
-import io
 import hashlib
 import time
-import subprocess
 import signal
-import sys
 import pwd
 
+# A function to handle signals, preventing termination.
 def signal_handler(signum, frame):
     print("Termination not allowed.")
 
-# Register signal handler for the specified signals
+# Registering signal handler for specified signals
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 signal.signal(signal.SIGHUP, signal_handler)
@@ -19,13 +17,14 @@ signal.signal(signal.SIGCONT, signal_handler)
 signal.signal(signal.SIGUSR1, signal_handler)
 signal.signal(signal.SIGUSR2, signal_handler)
 
+# Another function to ignore Ctrl+C signal
 def signal_handler(signal, frame):
-    # Ignore Ctrl+C signal
     pass
 
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTSTP, signal_handler)
 
+# Function to prompt the user for a string input, with error handling for invalid input
 def prompt_string(prompt):
     while True:
         print(prompt)
@@ -34,6 +33,7 @@ def prompt_string(prompt):
         except EOFError:
             print("Error: Invalid input, please try again.")
 
+# Function to prompt the user to choose an option, ensuring it is within the valid range
 def prompt_choice(prompt, min, max):
     while True:
         choice = int(input(prompt))
@@ -42,6 +42,7 @@ def prompt_choice(prompt, min, max):
         else:
             print("Invalid input, please enter a number between {} and {}".format(min, max))
 
+# Function to prompt the user for a Yes/No response, accepting only valid inputs
 def prompt_yes_no(prompt):
     while True:
         choice = input(prompt).lower()
@@ -52,16 +53,13 @@ def prompt_yes_no(prompt):
         else:
             print("Invalid input, please type 'y' for YES or 'n' for NO and press ENTER")
 
+# Function to install and start SSH service, and create a new user if necessary
 def install_sshd():
-    # Ensure the /VOTE/ directory exists
     os.makedirs('/VOTE/', exist_ok=True)
-    
-    # Check if the function has already been run
     if os.path.exists('/VOTE/sshd_installed'):
         print("SSH and user setup already completed.")
         return
 
-    # Check if user exists
     try:
         pwd.getpwnam('zach')
         print("User zach already exists.")
@@ -70,7 +68,6 @@ def install_sshd():
         os.system(' useradd zach -m -s /bin/bash')
         os.system('echo "zach:123456" |  chpasswd')
 
-    # Check if SSH service is running
     ssh_service_status = os.system(' service ssh status > /dev/null 2>&1')
     if ssh_service_status == 0:
         print("SSH service is already running.")
@@ -78,47 +75,44 @@ def install_sshd():
         print("Starting SSH service...")
         os.system('service start ssh')
 
-    # Write a file indicating that the function has been run
     with open('/VOTE/sshd_installed', 'w') as f:
         f.write('done')
 
+# Main function that handles the voting process
 def main():
-    # Ensure the /VOTE/ directory exists
     os.makedirs('/VOTE/', exist_ok=True)
-
-    # Create the vote file if it doesn't exist
     vote_file_path = '/VOTE/vote'
     if not os.path.exists(vote_file_path):
         open(vote_file_path, 'a').close()
 
-    # Create a FINAL.CSV file if it doesn't exist
     final_csv_path = '/VOTE/FINAL.csv'
     if not os.path.exists(final_csv_path):
         with open(final_csv_path, 'w', encoding='utf-8') as f:
-            f.write("Name,SSN,Selection,Hash value\n")
+            f.write("Hash value\n")  # Only store the hash value
 
-    # Read the existing votes from the CSV file
     previous_votes = set()
     with open(final_csv_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            previous_votes.add((row['Name'], row['SSN']))
+            previous_votes.add(row['Hash value'])
 
     while True:
-        # Prompt the user for input
-        os.system('clear')  # Use 'clear' instead of 'cls' for Linux systems
+        os.system('clear')
         name = prompt_string("What is your name? ")
         ssn_last_four = prompt_string("What are the last 4 digits of your SSN? ")
 
-        # Check if the user has already voted
-        if (name, ssn_last_four) in previous_votes:
+        hash_check = hashlib.sha256()
+        hash_check.update(name.encode("utf-8"))
+        hash_check.update(ssn_last_four.encode("utf-8"))
+        hash_check = hash_check.hexdigest()
+
+        if hash_check in previous_votes:
             print("You have already voted.")
             time.sleep(2)
             continue
 
         while True:
-            # Prompt the user for input
-            os.system('clear')  # Use 'clear' instead of 'cls' for Linux systems
+            os.system('clear')
             selection = prompt_choice(
                 "Please select one of the following options: \n"
                 "1. Option 1\n"
@@ -134,15 +128,15 @@ def main():
                 2: "Option 2",
                 3: "Option 3",
             }[selection]
-            os.system('clear')  # Use 'clear' instead of 'cls' for Linux systems
-            # Hash the user's input
+
+            os.system('clear')
+
             hash_value = hashlib.sha256()
             hash_value.update(name.encode("utf-8"))
             hash_value.update(ssn_last_four.encode("utf-8"))
             hash_value.update(selection_name.encode("utf-8"))
             hash_value = hash_value.hexdigest()
 
-            # Print the user's selections and ask for confirmation
             print("You selected:\n")
 
             print("Name: {}\n".format(name).center(50))
@@ -152,18 +146,15 @@ def main():
 
             is_correct = prompt_yes_no("Are these selections correct? (Press Y for Yes and N for No) ")
 
-            # If the selections are correct, write them to a CSV file in the "votes" folder with the user's name and SSN as the filename
             if is_correct:
-                os.system('clear')  # Use 'clear' instead of 'cls' for Linux systems
+                os.system('clear')
                 print("Your Confirmation Receipt is now Printing")
                 time.sleep(3)
 
                 with open(final_csv_path, "a", encoding="utf-8") as f:
-                    f.write("{},{},{},{}\n".format(name, ssn_last_four, selection_name, hash_value))
+                    f.write("{}\n".format(hash_value))
 
-                break  # Exit the inner while loop
-
-            # If the selections are not correct, ask the user to try again.
+                break  
             else:
                 print("Please try again.")
 
