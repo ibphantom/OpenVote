@@ -102,20 +102,19 @@ def display_histogram():
             reader = csv.reader(f)
             next(reader)  # Skip the header line
             for row in reader:
-                selection, count = row
-                selection_counts[selection] = int(count)
+                option_name, count = row
+                selection_counts[option_name] = int(count)
 
     for selection, count in selection_counts.items():
         option_name = option_names.get(selection, "Unknown Option")
-        print("Selection {}: {} - Count: {}".format(option_name, '#' * count, count))
+        print("Option {}: {} - Count: {}".format(option_name, '#' * count, count))
 
     with open(csv_file_path, 'w', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
-        if not csv_file_exists:
-            writer.writerow(["Selection", "Count"])  # Write the header
+        writer.writerow(["Option", "Count"])  # Write the header
 
         for selection, count in selection_counts.items():
-            writer.writerow([selection, count])
+            writer.writerow([selection, count + 1])
 
             
 # Main function that handles the voting process
