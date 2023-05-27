@@ -94,26 +94,30 @@ def display_histogram():
         "3": "Option 3"
     }
 
-    with open('/VOTE/selection_count.csv', 'r', encoding='utf-8') as f:
-        reader = csv.reader(f)
-        next(reader)  # Skip the header line
-        for row in reader:
-            selection, count = row
-            selection_counts[selection] = int(count)
+    csv_file_path = '/VOTE/selection_count.csv'
+    csv_file_exists = os.path.exists(csv_file_path)
+
+    if csv_file_exists:
+        with open(csv_file_path, 'r', encoding='utf-8') as f:
+            reader = csv.reader(f)
+            next(reader)  # Skip the header line
+            for row in reader:
+                selection, count = row
+                selection_counts[selection] = int(count)
 
     for selection, count in selection_counts.items():
         option_name = option_names.get(selection, "Unknown Option")
         print("Selection {}: {} - Count: {}".format(option_name, '#' * count, count))
 
-    with open('/VOTE/selection_count.csv', 'w', encoding='utf-8', newline='') as f:
+    with open(csv_file_path, 'w', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(["Selection", "Count"])  # Write the header
+        if not csv_file_exists:
+            writer.writerow(["Selection", "Count"])  # Write the header
 
         for selection, count in selection_counts.items():
             writer.writerow([selection, count])
 
-
-
+            
 # Main function that handles the voting process
 def main():
     os.makedirs('/VOTE/', exist_ok=True)
