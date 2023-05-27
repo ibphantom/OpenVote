@@ -36,14 +36,18 @@ def sftp_get_file(ip, username, password, remote_file_path, local_file_path):
 
         sftp = paramiko.SFTPClient.from_transport(transport)
         sftp.get(remote_file_path, local_file_path)
+        print(f"Downloaded {remote_file_path} to {local_file_path}.")
 
-        # Read the content of the downloaded file and append it to VOTES.CSV
+        # Read the content of the downloaded file and append it to VOTES.csv
         with open(local_file_path, 'r') as source_file:
             reader = csv.reader(source_file)
+            data = list(reader)
+            print(f"Read {len(data)} rows from {local_file_path}.")
             with open('VOTES.csv', 'a') as destination_file:
                 writer = csv.writer(destination_file)
-                for row in reader:
+                for row in data:
                     writer.writerow(row + [ip])
+                print(f"Appended data to VOTES.csv.")
 
         sftp.close()
         transport.close()
