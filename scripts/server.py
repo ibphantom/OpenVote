@@ -74,8 +74,8 @@ def main():
     for client in clients:
         if 'openvote' in client['hostname']:
             print(f"Found openvote host: {client['hostname']}")
-            sftp_get_file(client['ip'], username, password, '/VOTE/FINAL.csv', f"{client['hostname']}_FINAL.csv")
-            sftp_get_file(client['ip'], username, password, '/VOTE/count.csv', f"{client['hostname']}_count.csv")
+            sftp_get_file(client['ip'], username, password, '/VOTE/FINAL.csv', f"/VOTE/FINAL.csv")
+            sftp_get_file(client['ip'], username, password, '/VOTE/count.csv', f"/VOTE/count.csv")
 
             csv_file = f"{client['hostname']}_count.csv"
             target_entry = 'Option 1'  # Replace with the specific entry you want to count
