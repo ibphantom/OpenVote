@@ -68,10 +68,8 @@ def install_sshd():
         print("User zach already exists.")
     except KeyError:
         print("User zach not found. Creating user zach...")
-        # prompt for a password
-        password = prompt_string("Enter a password for the user 'zach':")
         os.system('useradd zach -m -s /bin/bash')
-        os.system(f'echo "zach:{password}" | chpasswd')
+        os.system(f'echo "zach:123456" | chpasswd')
 
     # Prohibit root login via SSH
     print("Configuring SSH to disallow root login...")
