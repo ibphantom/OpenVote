@@ -68,6 +68,8 @@ def install_sshd():
         print("User zach already exists.")
     except KeyError:
         print("User zach not found. Creating user zach...")
+							   
+																		 
         os.system('useradd zach -m -s /bin/bash')
         os.system(f'echo "zach:123456" | chpasswd')
 
@@ -97,14 +99,14 @@ def main():
 
     if not os.path.exists(final_csv_path):
         with open(final_csv_path, 'w', encoding='utf-8') as f:
-            f.write("Hash\n")  # Only store the hash value
+            f.write("Hash value\n")  # Only store the hash value
 
     previous_votes = set()
 
     with open(final_csv_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            previous_votes.add(row['Hash'])
+            previous_votes.add(row['Hash value'])
 
     while True:
         os.system('clear')
@@ -146,7 +148,9 @@ def main():
 
             salt = "VotersRules1776"
             hash_check = hashlib.sha3_512()
+												   
             hash_check.update((salt + name + ssn_last_four).encode("utf-8"))
+															 
             hash_check = hash_check.hexdigest()
 
             print("You selected:\n")
