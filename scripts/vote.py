@@ -4,7 +4,6 @@ import hashlib
 import time
 import signal
 import pwd
-import collections
 
 # A function to handle signals, preventing termination.
 def signal_handler(signum, frame):
@@ -84,42 +83,7 @@ def install_sshd():
 
     with open('/VOTE/sshd_installed', 'w') as f:
         f.write('done')
-        
 
-# Function to display histogram of vote selections
-def display_histogram():
-    selection_counts = collections.defaultdict(int)
-    option_names = {
-        "1": "Option 1",
-        "2": "Option 2",
-        "3": "Option 3"
-    }
-
-    csv_file_path = '/VOTE/selection_count.csv'
-    csv_file_exists = os.path.exists(csv_file_path)
-
-    if csv_file_exists:
-        with open(csv_file_path, 'r', encoding='utf-8') as f:
-            reader = csv.reader(f)
-            next(reader)  # Skip the header line
-            for row in reader:
-                option_name, count = row
-                selection_counts[option_name] = int(count)
-
-    for selection, count in selection_counts.items():
-        option_name = option_names.get(selection, "Unknown Option")
-        print("Option {}: {} - Count: {}".format(option_name, '#' * count, count))
-
-    with open(csv_file_path, 'w', encoding='utf-8', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerow(["Option", "Count"])  # Write the header
-
-        for selection, count in selection_counts.items():
-            option_name = option_names.get(selection, "Unknown Option")
-            writer.writerow([option_name, count])
-
-
-            
 # Main function that handles the voting process
 def main():
     os.makedirs('/VOTE/', exist_ok=True)
@@ -132,20 +96,11 @@ def main():
         with open(final_csv_path, 'w', encoding='utf-8') as f:
             f.write("Hash value\n")  # Only store the hash value
 
-    # New file to record selection counts
-    selection_count_path = '/VOTE/selection_count.txt'
-    if not os.path.exists(selection_count_path):
-        with open(selection_count_path, 'w', encoding='utf-8') as f:
-            f.write("Selection\n")  # Header for the selection file
-
     previous_votes = set()
     with open(final_csv_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
             previous_votes.add(row['Hash value'])
-
-    # Call the histogram display function at the start
-    display_histogram()
 
     while True:
         os.system('clear')
@@ -204,10 +159,6 @@ def main():
 
                 with open(final_csv_path, "a", encoding="utf-8") as f:
                     f.write("{}\n".format(hash_value))
-
-                # Record selection
-                with open(selection_count_path, "a", encoding="utf-8") as f:
-                    f.write("{}\n".format(selection))
 
                 break  
             else:
