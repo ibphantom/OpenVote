@@ -95,7 +95,7 @@ def main():
     if not os.path.exists(vote_file_path):
         with open(vote_file_path, 'w', encoding='utf-8', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(['Name', 'SSN Last Four', 'Selection', 'Hash Value'])
+            writer.writerow(['Vote', 'Hash'])
 
     final_csv_path = '/VOTE/FINAL.csv'
     count_csv_path = '/VOTE/count.csv'
@@ -103,14 +103,14 @@ def main():
     if not os.path.exists(final_csv_path):
         with open(final_csv_path, 'w', encoding='utf-8', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(['Hash Value'])
+            writer.writerow(['Hash'])
 
     previous_votes = set()
 
     with open(final_csv_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            previous_votes.add(row['Hash Value'])
+            previous_votes.add(row['Hash'])
 
     while True:
         os.system('clear')
