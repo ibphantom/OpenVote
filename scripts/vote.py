@@ -110,6 +110,12 @@ def main():
         name = prompt_string("What is your name? ")
         ssn_last_four = prompt_string("What are the last 4 digits of your SSN? ")
 
+        # Move hash computation before the 'if' condition
+        salt = "VotersRules1776"
+        hash_check = hashlib.sha3_512()
+        hash_check.update((salt + name + ssn_last_four).encode("utf-8"))
+        hash_check = hash_check.hexdigest()
+
         if hash_check in previous_votes:
             print("You have already voted.")
             time.sleep(2)
