@@ -1,2 +1,2 @@
-Name,SSN,Hash value,Selection
-Zach,1234,Option 1,048d626e942e1d219c4d375a0c8c0c77c34c91fc44a83c637cf1a0d2eaa2f8e5
+Vote, Hash
+EXAMPLE, 048d626e942e1d219c4d375a0c8c0c77c34c91fc44a83c637cf1a0d2eaa2f8e5
