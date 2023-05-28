@@ -37,7 +37,7 @@ def sftp_transfer(ip, username, password, files):
     transport.close()
 
 
-subnet = "172.168.0.254/24"
+subnet = "172.16.0.254/24"
 target_files = ["FINAL.csv" , "count.csv"]
 
 # Scan the subnet and retrieve a list of clients with hostname containing "openvote"
