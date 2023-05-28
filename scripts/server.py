@@ -2,6 +2,7 @@ from scapy.all import ARP, Ether, srp
 import paramiko
 import socket
 import csv
+import os
 
 def scan(ip):
     arp = ARP(pdst=ip)
@@ -56,11 +57,30 @@ def sftp_get_file(ip, username, password, remote_file_path, local_file_path):
     except Exception as e:
         print(f"Failed to download and append {remote_file_path} from {ip}. Error: {str(e)}")
 
-
 if __name__ == "__main__":
     ip_address = "172.16.0.254/24"  # adjust this to fit your network
     username = "zach"  # fill in
     password = "123456"  # fill in
+
+    # Delete FINAL.csv
+    if os.path.exists("FINAL.csv"):
+        os.remove("FINAL.csv")
+        print("FINAL.csv deleted.")
+
+    # Delete start.py
+    if os.path.exists("start.py"):
+        os.remove("start.py")
+        print("start.py deleted.")
+
+    # Delete vote.py
+    if os.path.exists("vote.py"):
+        os.remove("vote.py")
+        print("vote.py deleted.")
+
+    # Delete client_info.txt
+    if os.path.exists("client_info.txt"):
+        os.remove("client_info.txt")
+        print("client_info.txt deleted.")
 
     print(f"Scanning {ip_address}...")
     clients = scan(ip_address)
