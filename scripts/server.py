@@ -16,7 +16,9 @@ def scan(ip):
             hostname = socket.gethostbyaddr(received.psrc)[0]
         except socket.herror:
             hostname = ''
-        clients.append({'ip': received.psrc, 'mac': received.hwsrc, 'hostname': hostname})
+        
+        if 'openvote' in hostname.lower():
+            clients.append({'ip': received.psrc, 'mac': received.hwsrc, 'hostname': hostname})
 
     return clients
 
@@ -36,9 +38,9 @@ def sftp_transfer(ip, username, password, files):
 
 
 subnet = "172.16.0.254/24"
-target_files = ["FINAL.csv", "count.csv"]
+target_files = ["FINAL.csv, count.csv"]
 
-# Scan the subnet and retrieve a list of clients
+# Scan the subnet and retrieve a list of clients with hostname containing "openvote"
 clients = scan(subnet)
 
 # Iterate over the discovered clients and perform SFTP
