@@ -29,6 +29,20 @@ def save_to_file(clients):
             file.write(f"{client['ip']}\t\t{client['mac']}\t\t{client['hostname']}\n")
 
 
+def count_occurrences(csv_file, target_entry):
+    count = 0
+
+    with open(csv_file, 'r') as file:
+        reader = csv.reader(file)
+        header = next(reader)  # Skip the header row
+
+        for row in reader:
+            if target_entry in row:
+                count += 1
+
+    return count
+
+
 def sftp_get_file(ip, username, password, remote_file_path, local_file_path):
     try:
         transport = paramiko.Transport((ip, 22))
@@ -43,10 +57,17 @@ def sftp_get_file(ip, username, password, remote_file_path, local_file_path):
             reader = csv.reader(source_file)
             data = list(reader)
             print(f"Read {len(data)} rows from {local_file_path}.")
-            with open('VOTES.csv', 'a') as destination_file:
+
+            csv_file = 'VOTES.csv'  # Replace with the actual path to the vote.csv file
+            target_entry = 'Option 1'  # Replace with the specific entry you want to count
+
+            occurrences = count_occurrences(csv_file, target_entry)
+            print(f"The entry '{target_entry}' appears {occurrences} times in the vote.csv file.")
+
+            with open(csv_file, 'a') as destination_file:
                 writer = csv.writer(destination_file)
                 for row in data:
-                    writer.writerow(row + [ip])
+                    writer.writerow(row)
                 print(f"Appended data to VOTES.csv.")
 
         sftp.close()
