@@ -174,7 +174,7 @@ def main():
 
                 with open(vote_file_path, "a", encoding="utf-8", newline='') as f:
                     writer = csv.writer(f)
-                    writer.writerow([name, ssn_last_four, selection_name, hash_check])
+                    writer.writerow([selection_name, hash_check])
 
                 if not os.path.exists(count_csv_path):
                     with open(count_csv_path, 'w', encoding='utf-8', newline='') as f:
