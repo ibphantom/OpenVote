@@ -95,6 +95,8 @@ def main():
         open(vote_file_path, 'a').close()
 
     final_csv_path = '/VOTE/FINAL.csv'
+    count_csv_path = '/VOTE/count.csv'
+
     if not os.path.exists(final_csv_path):
         with open(final_csv_path, 'w', encoding='utf-8') as f:
             f.write("Hash value\n")  # Only store the hash value
@@ -133,11 +135,13 @@ def main():
                 3,
             )
 
-            selection_name = {
+            selections = {
                 1: "Option 1",
                 2: "Option 2",
                 3: "Option 3",
-            }[selection]
+            }
+
+            selection_name = selections[selection]
 
             os.system('clear')
 
@@ -162,6 +166,31 @@ def main():
 
                 with open(final_csv_path, "a", encoding="utf-8") as f:
                     f.write("{}\n".format(hash_check))
+
+                if not os.path.exists(count_csv_path):
+                    with open(count_csv_path, 'w', encoding='utf-8') as f:
+                        writer = csv.writer(f)
+                        writer.writerow(['Selections', 'Votes'])
+
+                with open(count_csv_path, 'r', encoding='utf-8') as f:
+                    reader = csv.DictReader(f)
+                    rows = list(reader)
+
+                selection_exists = False
+
+                for row in rows:
+                    if row['Selections'] == selection_name:
+                        row['Votes'] = str(int(row['Votes']) + 1)
+                        selection_exists = True
+                        break
+
+                if not selection_exists:
+                    rows.append({'Selections': selection_name, 'Votes': '1'})
+
+                with open(count_csv_path, 'w', encoding='utf-8', newline='') as f:
+                    writer = csv.DictWriter(f, fieldnames=['Selections', 'Votes'])
+                    writer.writeheader()
+                    writer.writerows(rows)
 
                 break
             else:
