@@ -100,10 +100,10 @@ def main():
             f.write("Hash\n")  # Only store the hash value
 
     previous_votes = set()
-    with open(final_csv_path, 'r', encoding='utf-8') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            previous_votes.add(row['Hash'])
+    with open(final_csv_path, "a", encoding="utf-8") as f:
+    writer = csv.writer(f)
+    writer.writerow([hash_check])
+
 
     while True:
         os.system('clear')
