@@ -110,11 +110,6 @@ def main():
         name = prompt_string("What is your name? ")
         ssn_last_four = prompt_string("What are the last 4 digits of your SSN? ")
 
-        salt = "VotersRules1776"
-        hash_check = hashlib.sha3_512()
-        hash_check.update((salt + name + ssn_last_four).encode("utf-8"))
-        hash_check = hash_check.hexdigest()
-
         if hash_check in previous_votes:
             print("You have already voted.")
             time.sleep(2)
@@ -140,18 +135,17 @@ def main():
 
             os.system('clear')
 
-            hash_value = hashlib.sha3_512()
-            hash_value.update(name.encode("utf-8"))
-            hash_value.update(ssn_last_four.encode("utf-8"))
-            hash_value.update(selection_name.encode("utf-8"))
-            hash_value = hash_value.hexdigest()
+            salt = "VotersRules1776"
+            hash_check = hashlib.sha3_512()
+            hash_check.update((salt + name + ssn_last_four).encode("utf-8"))
+            hash_check = hash_check.hexdigest()
 
             print("You selected:\n")
 
             print("Name: {}\n".format(name).center(50))
             print("SSN: {}\n".format(ssn_last_four).center(50))
             print("Selection: {}\n\n".format(selection_name).center(50))
-            print("Hash value: {}".format(hash_value).center(50))
+            print("Hash value: {}".format(hash_check).center(50))
 
             is_correct = prompt_yes_no("Are these selections correct? (Press Y for Yes and N for No) ")
 
@@ -161,7 +155,7 @@ def main():
                 time.sleep(3)
 
                 with open(final_csv_path, "a", encoding="utf-8") as f:
-                    f.write("{}\n".format(hash_value))
+                    f.write("{}\n".format(hash_check))
 
                 break
             else:
