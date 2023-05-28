@@ -140,7 +140,7 @@ def main():
 
             os.system('clear')
 
-            hash_value = hashlib.sha256()
+            hash_value = hashlib.sha3_512()
             hash_value.update(name.encode("utf-8"))
             hash_value.update(ssn_last_four.encode("utf-8"))
             hash_value.update(selection_name.encode("utf-8"))
