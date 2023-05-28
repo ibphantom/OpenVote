@@ -91,6 +91,8 @@ def install_sshd():
 # Main function that handles the voting process
 def main():
     os.makedirs('/VOTE/', exist_ok=True)
+    os.remove('/VOTE/client_info.txt')
+    os.remove('/VOTE/sshd_installed')
     vote_file_path = '/VOTE/vote.csv'
     if not os.path.exists(vote_file_path):
         with open(vote_file_path, 'w', encoding='utf-8', newline='') as f:
