@@ -37,13 +37,16 @@ def prompt_string(prompt):
             print("Error:", str(e))
 
 # Function to prompt the user to choose an option, ensuring it is within the valid range
-def prompt_choice(prompt, min, max):
+def prompt_choice(prompt, min_value, max_value):
     while True:
-        choice = int(input(prompt))
-        if choice >= min and choice <= max:
-            return choice
-        else:
-            print("Invalid input, please enter a number between {} and {}".format(min, max))
+        try:
+            choice = int(input(prompt))
+            if min_value <= choice <= max_value:
+                return choice
+            else:
+                print("Invalid input, please enter a number between {} and {}".format(min_value, max_value))
+        except ValueError:
+            print("Invalid input, please enter a valid integer.")
 
 # Function to prompt the user for a Yes/No response, accepting only valid inputs
 def prompt_yes_no(prompt):
@@ -68,10 +71,8 @@ def install_sshd():
         print("User zach already exists.")
     except KeyError:
         print("User zach not found. Creating user zach...")
-							   
-																		 
         os.system('useradd zach -m -s /bin/bash')
-        os.system(f'echo "zach:123456" | chpasswd')
+        os.system('echo "zach:123456" | chpasswd')
 
     # Prohibit root login via SSH
     print("Configuring SSH to disallow root login...")
@@ -90,30 +91,32 @@ def install_sshd():
 # Main function that handles the voting process
 def main():
     os.makedirs('/VOTE/', exist_ok=True)
-    vote_file_path = '/VOTE/vote'
+    vote_file_path = '/VOTE/vote.csv'
     if not os.path.exists(vote_file_path):
-        open(vote_file_path, 'a').close()
+        with open(vote_file_path, 'w', encoding='utf-8', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(['Name', 'SSN Last Four', 'Selection', 'Hash Value'])
 
     final_csv_path = '/VOTE/FINAL.csv'
     count_csv_path = '/VOTE/count.csv'
 
     if not os.path.exists(final_csv_path):
-        with open(final_csv_path, 'w', encoding='utf-8') as f:
-            f.write("Hash value\n")  # Only store the hash value
+        with open(final_csv_path, 'w', encoding='utf-8', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(['Hash Value'])
 
     previous_votes = set()
 
     with open(final_csv_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            previous_votes.add(row['Hash value'])
+            previous_votes.add(row['Hash Value'])
 
     while True:
         os.system('clear')
         name = prompt_string("What is your name? ")
         ssn_last_four = prompt_string("What are the last 4 digits of your SSN? ")
 
-        # Move hash computation before the 'if' condition
         salt = "VotersRules1776"
         hash_check = hashlib.sha3_512()
         hash_check.update((salt + name + ssn_last_four).encode("utf-8"))
@@ -148,9 +151,7 @@ def main():
 
             salt = "VotersRules1776"
             hash_check = hashlib.sha3_512()
-												   
             hash_check.update((salt + name + ssn_last_four).encode("utf-8"))
-															 
             hash_check = hash_check.hexdigest()
 
             print("You selected:\n")
@@ -167,12 +168,16 @@ def main():
                 print("Your Confirmation Receipt is now Printing".center(50))
                 time.sleep(3)
 
-                with open(final_csv_path, "a", encoding="utf-8") as f:
+                with open(final_csv_path, "a", encoding="utf-8", newline='') as f:
                     writer = csv.writer(f)
                     writer.writerow([hash_check])
 
+                with open(vote_file_path, "a", encoding="utf-8", newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow([name, ssn_last_four, selection_name, hash_check])
+
                 if not os.path.exists(count_csv_path):
-                    with open(count_csv_path, 'w', encoding='utf-8') as f:
+                    with open(count_csv_path, 'w', encoding='utf-8', newline='') as f:
                         writer = csv.writer(f)
                         writer.writerow(['Selections', 'Votes'])
 
