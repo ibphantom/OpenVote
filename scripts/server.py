@@ -44,7 +44,7 @@ clients = scan(subnet)
 # Iterate over the discovered clients and perform SFTP
 for client in clients:
     ip_address = client['ip']
-    username = "zach
+    username = "zach"
     password = "123456"
     
     sftp_transfer(ip_address, username, password, target_files)
