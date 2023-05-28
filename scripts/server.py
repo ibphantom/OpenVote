@@ -11,7 +11,12 @@ def scan(ip):
     clients = []
 
     for sent, received in result:
-        clients.append({'ip': received.psrc, 'mac': received.hwsrc})
+        try:
+            hostname = socket.gethostbyaddr(received.psrc)[0]
+        except socket.herror:
+            hostname = ''
+
+        clients.append({'ip': received.psrc, 'mac': received.hwsrc, 'hostname': hostname})
 
     return clients
 
