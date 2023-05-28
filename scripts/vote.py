@@ -163,7 +163,7 @@ def main():
                 time.sleep(3)
 
                 with open(final_csv_path, "a", encoding="utf-8") as f:
-                    f.write("{}\n".format(hash_check))
+                    f.write("{}\n".format(selection_name, hash_check))
 
                 if not os.path.exists(count_csv_path):
                     with open(count_csv_path, 'w', encoding='utf-8') as f:
