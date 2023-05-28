@@ -24,14 +24,17 @@ def signal_handler(signal, frame):
 signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTSTP, signal_handler)
 
-# Function to prompt the user for a string input, with error handling for invalid input
+# Function to prompt the user for a string input, with error handling for invalid or empty input
 def prompt_string(prompt):
     while True:
         print(prompt)
         try:
-            return input()
-        except EOFError:
-            print("Error: Invalid input, please try again.")
+            value = input().strip()
+            if not value:
+                raise ValueError("Input cannot be empty.")
+            return value
+        except ValueError as e:
+            print("Error:", str(e))
 
 # Function to prompt the user to choose an option, ensuring it is within the valid range
 def prompt_choice(prompt, min, max):
@@ -160,7 +163,7 @@ def main():
                 with open(final_csv_path, "a", encoding="utf-8") as f:
                     f.write("{}\n".format(hash_value))
 
-                break  
+                break
             else:
                 print("Please try again.")
 
