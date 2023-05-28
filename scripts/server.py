@@ -16,7 +16,7 @@ def scan(ip):
             hostname = socket.gethostbyaddr(received.psrc)[0]
         except socket.herror:  # unable to resolve
             hostname = ''
-        
+
         clients.append({'ip': received.psrc, 'mac': received.hwsrc, 'hostname': hostname})
 
     return clients
@@ -52,33 +52,15 @@ def sftp_get_file(ip, username, password, remote_file_path, local_file_path):
         sftp.get(remote_file_path, local_file_path)
         print(f"Downloaded {remote_file_path} to {local_file_path}.")
 
-        # Read the content of the downloaded file and append it to VOTES.csv
-        with open(local_file_path, 'r') as source_file:
-            reader = csv.reader(source_file)
-            data = list(reader)
-            print(f"Read {len(data)} rows from {local_file_path}.")
-
-            csv_file = 'VOTES.csv'  # Replace with the actual path to the vote.csv file
-            target_entry = 'Option 1'  # Replace with the specific entry you want to count
-
-            occurrences = count_occurrences(csv_file, target_entry)
-            print(f"The entry '{target_entry}' appears {occurrences} times in the vote.csv file.")
-
-            with open(csv_file, 'a') as destination_file:
-                writer = csv.writer(destination_file)
-                for row in data:
-                    writer.writerow(row)
-                print(f"Appended data to VOTES.csv.")
-
         sftp.close()
         transport.close()
 
-        print(f"Downloaded and appended {remote_file_path} from {ip}")
+        print(f"Downloaded {remote_file_path} from {ip}")
     except Exception as e:
-        print(f"Failed to download and append {remote_file_path} from {ip}. Error: {str(e)}")
+        print(f"Failed to download {remote_file_path} from {ip}. Error: {str(e)}")
 
 
-if __name__ == "__main__":
+def main():
     ip_address = "172.16.0.254/24"  # adjust this to fit your network
     username = "zach"  # fill in
     password = "123456"  # fill in
@@ -93,3 +75,14 @@ if __name__ == "__main__":
         if 'openvote' in client['hostname']:
             print(f"Found openvote host: {client['hostname']}")
             sftp_get_file(client['ip'], username, password, '/VOTE/FINAL.csv', f"{client['hostname']}_FINAL.csv")
+            sftp_get_file(client['ip'], username, password, '/VOTE/count.csv', f"{client['hostname']}_count.csv")
+
+            csv_file = f"{client['hostname']}_count.csv"
+            target_entry = 'Option 1'  # Replace with the specific entry you want to count
+
+            occurrences = count_occurrences(csv_file, target_entry)
+            print(f"The entry '{target_entry}' appears {occurrences} times in {csv_file}.")
+
+
+if __name__ == "__main__":
+    main()
