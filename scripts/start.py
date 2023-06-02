@@ -16,10 +16,10 @@ while True:
 
 # Create a script to start vote.py on boot if the device is a client
 if device_type.lower() == "client":
-    with open('/VOTE/vote', 'w') as f:
+    with open('/OpenVote/vote', 'w') as f:
         f.write('#!/bin/sh\n')
         f.write('/usr/bin/python3 /OpenVote/vote.py >> /path/to/logfile.log 2>&1\n')
-    os.chmod('/VOTE/vote', 0o755)
+    os.chmod('/OpenVote/vote', 0o755)
 
 if device_type.lower() == "server":
     print("This device is a server.")
