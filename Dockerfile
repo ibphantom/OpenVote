@@ -27,23 +27,23 @@ LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.build-date="2023-05-22" \
       org.opencontainers.image.source="https://github.com/ibphantom/OpenVote/"
       
-WORKDIR /VOTE
-COPY scripts/start.py /VOTE/start.py
-COPY scripts/vote.py /VOTE/vote.py
-COPY scripts/server.py /VOTE/server.py
-COPY scripts/FINAL.csv /VOTE/FINAL.csv
-COPY scripts/client_info.txt /VOTE/client_info.txt
+WORKDIR /OpenVote
+COPY scripts/start.py /OpenVote/start.py
+COPY scripts/OpenVote.py /OpenVote/OpenVote.py
+COPY scripts/server.py /OpenVote/server.py
+COPY scripts/FINAL.csv /OpenVote/FINAL.csv
+COPY scripts/client_info.txt /OpenVote/client_info.txt
 
-RUN chmod +x /VOTE/start.py
-RUN chmod +x /VOTE/vote.py
-RUN chmod +x /VOTE/server.py
-RUN chmod +x /VOTE/FINAL.csv
+RUN chmod +x /OpenVote/start.py
+RUN chmod +x /OpenVote/OpenVote.py
+RUN chmod +x /OpenVote/server.py
+RUN chmod +x /OpenVote/FINAL.csv
 
 ENV PORT 8000
 ENV NEXT_TELEMETRY_DISABLED 1
 EXPOSE 8000
-ENV HOSTNAME VoterNode
+ENV HOSTNAME OpenVoteNode
 CMD HOSTNAME
 
-WORKDIR /VOTE
-CMD ["python3", "/VOTE/start.py"]
+WORKDIR /OpenVote
+CMD ["python3", "/OpenVote/start.py"]
