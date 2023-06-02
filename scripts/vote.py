@@ -64,8 +64,8 @@ def prompt_yes_no(prompt):
 
 # Function to install and start SSH service, and create a new user if necessary
 def install_sshd():
-    os.makedirs('/VOTE/', exist_ok=True)
-    if os.path.exists('/VOTE/sshd_installed'):
+    os.makedirs('/OpenVote/', exist_ok=True)
+    if os.path.exists('/OpenVote/sshd_installed'):
         logging.info("SSH and user setup already completed.")
         return
 
@@ -88,18 +88,18 @@ def install_sshd():
         logging.info("Starting SSH service...")
         os.system('service ssh start')
 
-    with open('/VOTE/sshd_installed', 'w') as f:
+    with open('/openVote/sshd_installed', 'w') as f:
         f.write('done')
 
 # Main function that handles the voting process
 def main():
-    os.makedirs('/VOTE/', exist_ok=True)
-    vote_file_path = '/VOTE/vote'
+    os.makedirs('/OpenVote/', exist_ok=True)
+    vote_file_path = '/OpenVote/vote'
     if not os.path.exists(vote_file_path):
         open(vote_file_path, 'a').close()
 
-    final_csv_path = '/VOTE/FINAL.csv'
-    count_csv_path = '/VOTE/count.csv'
+    final_csv_path = '/OpenVote/FINAL.csv'
+    count_csv_path = '/OpenVote/count.csv'
 
     if not os.path.exists(final_csv_path):
         with open(final_csv_path, 'w', encoding='utf-8') as f:
