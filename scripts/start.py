@@ -18,7 +18,7 @@ while True:
 if device_type.lower() == "client":
     with open('/VOTE/vote', 'w') as f:
         f.write('#!/bin/sh\n')
-        f.write('/usr/bin/python3 /VOTE/vote.py >> /path/to/logfile.log 2>&1\n')
+        f.write('/usr/bin/python3 /OpenVote/vote.py >> /path/to/logfile.log 2>&1\n')
     os.chmod('/VOTE/vote', 0o755)
 
 if device_type.lower() == "server":
