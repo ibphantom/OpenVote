@@ -88,7 +88,7 @@ def install_sshd():
         logging.info("Starting SSH service...")
         os.system('service ssh start')
 
-    with open('/openVote/sshd_installed', 'w') as f:
+    with open('/OpenVote/sshd_installed', 'w') as f:
         f.write('done')
 
 # Main function that handles the voting process
