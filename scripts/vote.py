@@ -110,7 +110,7 @@ def main():
     with open(final_csv_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            previous_votes.add(row['Hash value'])
+            previous_votes.add(row['Hash'])
 
     while True:
         os.system('clear')
