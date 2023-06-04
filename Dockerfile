@@ -29,13 +29,13 @@ LABEL maintainer="ibPhantom <your.email@example.com>" \
       
 WORKDIR /OpenVote
 COPY /scripts/start.py /OpenVote/start.py
-COPY /scripts/OpenVote.py /OpenVote/OpenVote.py
+COPY /scripts/vote.py /OpenVote/vote.py
 COPY /scripts/server.py /OpenVote/server.py
 COPY /scripts/FINAL.csv /OpenVote/FINAL.csv
 COPY /scripts/client_info.txt /OpenVote/client_info.txt
 
 RUN chmod +x /OpenVote/start.py
-RUN chmod +x /OpenVote/OpenVote.py
+RUN chmod +x /OpenVote/vote.py
 RUN chmod +x /OpenVote/server.py
 RUN chmod +x /OpenVote/FINAL.csv
 
