@@ -33,11 +33,13 @@ COPY /scripts/vote.py /OpenVote/vote.py
 COPY /scripts/server.py /OpenVote/server.py
 COPY /scripts/FINAL.csv /OpenVote/FINAL.csv
 COPY /scripts/client_info.txt /OpenVote/client_info.txt
+COPY /scripts/home.py /OpenVote/home.py
 
 RUN chmod +x /OpenVote/start.py
 RUN chmod +x /OpenVote/vote.py
 RUN chmod +x /OpenVote/server.py
 RUN chmod +x /OpenVote/FINAL.csv
+RUN chmod +x /OpenVote/home.py
 
 ENV PORT 8000
 ENV NEXT_TELEMETRY_DISABLED 1
