@@ -1,51 +1,35 @@
-# Operating System
-FROM ubuntu:latest
+# Start from a slim Python base
+FROM python:3.12-slim
 
-# Install Python, pip, autoconf, and other dependencies
+# Install system dependencies (no UFW, no autoconf)
 RUN apt-get update && \
-    apt-get install -y python3 python3-pip nano autoconf ufw openssh-server && \
+    apt-get install -y nano openssh-server && \
+    rm -rf /var/lib/apt/lists/* && \
     ln -s /usr/bin/clear /usr/bin/cls
 
-#Enable ssh
-#RUN ufw allow ssh
-#RUN ufw allow 22
-#RUN ufw enable
+# Upgrade pip and install Python packages
+RUN pip install --upgrade pip && \
+    pip install pycrypto pycryptodome paramiko scapy
 
-# Upgrade pip
-RUN python3 -m pip install --upgrade pip 
-
-# Install Python packages
-RUN python3 -m pip install pycrypto
-RUN python3 -m pip install pycryptodome
-RUN python3 -m pip install paramiko
-RUN pip3 install scapy
-
-# Designer Information
+# Metadata
 LABEL maintainer="ibPhantom <your.email@example.com>" \
       org.label-schema.description="A containerized version of OpenVote" \
       org.label-schema.version="0.1.1" \
       org.label-schema.build-date="2023-05-22" \
       org.opencontainers.image.source="https://github.com/ibphantom/OpenVote/"
-      
+
+# Copy scripts
 WORKDIR /OpenVote
-COPY /scripts/start.py /OpenVote/start.py
-COPY /scripts/vote.py /OpenVote/vote.py
-COPY /scripts/server.py /OpenVote/server.py
-COPY /scripts/FINAL.csv /OpenVote/FINAL.csv
-COPY /scripts/client_info.txt /OpenVote/client_info.txt
-COPY /scripts/home.py /OpenVote/home.py
+COPY /scripts/ ./
 
-RUN chmod +x /OpenVote/start.py
-RUN chmod +x /OpenVote/vote.py
-RUN chmod +x /OpenVote/server.py
-RUN chmod +x /OpenVote/FINAL.csv
-RUN chmod +x /OpenVote/home.py
+# Make all Python scripts executable
+RUN chmod +x *.py FINAL.csv
 
-ENV PORT 8000
-ENV NEXT_TELEMETRY_DISABLED 1
+# Environment variables
+ENV PORT=8000
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV HOSTNAME=OpenVoteNode
+
+# Expose port and set default command
 EXPOSE 8000
-ENV HOSTNAME OpenVoteNode
-CMD HOSTNAME
-
-WORKDIR /OpenVote
 CMD ["python3", "/OpenVote/start.py"]
