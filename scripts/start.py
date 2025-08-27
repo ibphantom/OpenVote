@@ -1,33 +1,44 @@
-# Your Python script
-
-import subprocess
-import sys
+#!/usr/bin/env python3
 import os
-import socket
-import uuid
-import random
+import sys
+import subprocess
+from pathlib import Path
 
-while True:
+OPENVOTE_ROOT = Path("/OpenVote")
+CLIENT_SCRIPT = OPENVOTE_ROOT / "vote.py"
+SERVER_SCRIPT = OPENVOTE_ROOT / "server.py"
+
+
+def main() -> int:
     try:
-        device_type = input("Is this device a server or a client? ")
-        break
+        role = input("Is this device a server or a client? ").strip().lower()
     except EOFError:
-        print("Error: End of input reached unexpectedly. Please try again.")
+        print("Error: End of input reached unexpectedly.")
+        return 1
 
-# Create a script to start vote.py on boot if the device is a client
-if device_type.lower() == "client":
-    with open('/OpenVote/vote', 'w') as f:
-        f.write('#!/bin/sh\n')
-        f.write('/usr/bin/python3 /OpenVote/vote.py >> /path/to/logfile.log 2>&1\n')
-    os.chmod('/OpenVote/vote', 0o755)
+    if role not in {"server", "client"}:
+        print("Invalid input. Enter 'server' or 'client'.")
+        return 2
 
-if device_type.lower() == "server":
-    print("This device is a server.")
-    subprocess.run(["python3", "server.py"])
-elif device_type.lower() == "client":
-    print("This device is a client.")
-    subprocess.run(["python3", "vote.py"])
-else:
-    print("Invalid input. Please enter either 'server' or 'client'.")
+    # Ensure the working tree exists
+    OPENVOTE_ROOT.mkdir(parents=True, exist_ok=True)
 
-input("Press Enter to exit...")
+    if role == "client":
+        if not CLIENT_SCRIPT.exists():
+            print(f"Missing {CLIENT_SCRIPT}.")
+            return 3
+        print("Launching client voting terminal.")
+        return subprocess.run([sys.executable, str(CLIENT_SCRIPT)], check=False).returncode
+
+    if role == "server":
+        if not SERVER_SCRIPT.exists():
+            print(f"Missing {SERVER_SCRIPT}.")
+            return 4
+        print("Launching server aggregator.")
+        return subprocess.run([sys.executable, str(SERVER_SCRIPT)], check=False).returncode
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
