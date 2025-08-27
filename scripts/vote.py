@@ -6,108 +6,81 @@ import signal
 import pwd
 import logging
 
-# Configure logging settings
-logging.basicConfig(filename='voting.log', level=logging.INFO)
+# Configure logging
+logging.basicConfig(filename='/OpenVote/voting.log', level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
+# --- Signal Handling ---
+def block_signals():
+    def handler(signum, frame):
+        logging.info(f"Signal {signum} ignored.")
+    for sig in [signal.SIGINT, signal.SIGTERM, signal.SIGHUP, signal.SIGTSTP, signal.SIGUSR1, signal.SIGUSR2]:
+        signal.signal(sig, handler)
 
-# A function to handle signals, preventing termination.
-def signal_handler(signum, frame):
-    logging.info("Termination not allowed.")
-
-
-# Registering signal handler for specified signals
-signal.signal(signal.SIGINT, signal_handler)
-signal.signal(signal.SIGTERM, signal_handler)
-signal.signal(signal.SIGHUP, signal_handler)
-signal.signal(signal.SIGCONT, signal_handler)
-signal.signal(signal.SIGUSR1, signal_handler)
-signal.signal(signal.SIGUSR2, signal_handler)
-
-# Another function to ignore Ctrl+C signal
-def signal_handler(signal, frame):
-    pass
-
-signal.signal(signal.SIGINT, signal_handler)
-signal.signal(signal.SIGTSTP, signal_handler)
-
-# Function to prompt the user for a string input, with error handling for invalid or empty input
+# --- Input Helpers ---
 def prompt_string(prompt):
     while True:
-        logging.info(prompt)
         try:
-            value = input().strip()
-            if not value:
-                raise ValueError("Input cannot be empty.")
-            return value
+            value = input(prompt).strip()
+            if value:
+                return value
+            raise ValueError("Input cannot be empty.")
         except ValueError as e:
-            logging.error("Error: " + str(e))
+            logging.error(e)
 
-# Function to prompt the user to choose an option, ensuring it is within the valid range
-def prompt_choice(prompt, min, max):
+def prompt_choice(prompt, min_val, max_val):
     while True:
-        choice = int(input(prompt))
-        if choice >= min and choice <= max:
-            return choice
-        else:
-            logging.error("Invalid input, please enter a number between {} and {}".format(min, max))
+        try:
+            choice = int(input(prompt))
+            if min_val <= choice <= max_val:
+                return choice
+            logging.error(f"Invalid input: {choice}")
+        except ValueError:
+            logging.error("Input must be a number.")
 
-# Function to prompt the user for a Yes/No response, accepting only valid inputs
 def prompt_yes_no(prompt):
     while True:
-        choice = input(prompt).lower()
+        choice = input(prompt).strip().lower()
         if choice in ("y", "yes"):
             return True
-        elif choice in ("n", "no"):
+        if choice in ("n", "no"):
             return False
-        else:
-            logging.error("Invalid input, please type 'y' for YES or 'n' for NO and press ENTER")
+        logging.error("Invalid input, type 'y' or 'n'.")
 
-# Function to install and start SSH service, and create a new user if necessary
+# --- SSH Setup Placeholder ---
 def install_sshd():
-    os.makedirs('/OpenVote/', exist_ok=True)
-    if os.path.exists('/OpenVote/sshd_installed'):
-        logging.info("SSH and user setup already completed.")
+    os.makedirs('/OpenVote', exist_ok=True)
+    marker_file = '/OpenVote/sshd_installed'
+
+    if os.path.exists(marker_file):
         return
 
     try:
         pwd.getpwnam('zach')
         logging.info("User zach already exists.")
     except KeyError:
-        logging.info("User zach not found. Creating user zach...")
+        logging.info("Creating user zach...")
         os.system('useradd zach -m -s /bin/bash')
-        os.system(f'echo "zach:123456" | chpasswd')
+        os.system('echo "zach:123456" | chpasswd')
 
-    # Prohibit root login via SSH
-    logging.info("Configuring SSH to disallow root login...")
-    os.system('sed -i "s/^#*PermitRootLogin.*/PermitRootLogin prohibit-password/g" /etc/ssh/sshd_config')
+    logging.info("Configuring SSH...")
+    os.system('sed -i "s/^#*PermitRootLogin.*/PermitRootLogin prohibit-password/" /etc/ssh/sshd_config')
+    os.system('service ssh start || systemctl start ssh')
 
-    ssh_service_status = os.system('service ssh status > /dev/null 2>&1')
-    if ssh_service_status == 0:
-        logging.info("SSH service is already running.")
-    else:
-        logging.info("Starting SSH service...")
-        os.system('service ssh start')
+    with open(marker_file, 'w') as f:
+        f.write("done")
 
-    with open('/OpenVote/sshd_installed', 'w') as f:
-        f.write('done')
-
-# Main function that handles the voting process
+# --- Main Voting Logic ---
 def main():
-    os.makedirs('/OpenVote/', exist_ok=True)
-    vote_file_path = '/OpenVote/vote'
-    if not os.path.exists(vote_file_path):
-        open(vote_file_path, 'a').close()
+    os.makedirs('/OpenVote', exist_ok=True)
+    final_csv = '/OpenVote/FINAL.csv'
+    count_csv = '/OpenVote/count.csv'
 
-    final_csv_path = '/OpenVote/FINAL.csv'
-    count_csv_path = '/OpenVote/count.csv'
-
-    if not os.path.exists(final_csv_path):
-        with open(final_csv_path, 'w', encoding='utf-8') as f:
-            f.write("Hash value\n")  # Only store the hash value
+    if not os.path.exists(final_csv):
+        with open(final_csv, 'w', encoding='utf-8') as f:
+            f.write("Hash\n")
 
     previous_votes = set()
-
-    with open(final_csv_path, 'r', encoding='utf-8') as f:
+    with open(final_csv, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
             previous_votes.add(row['Hash'])
@@ -117,91 +90,65 @@ def main():
         name = prompt_string("What is your name? ")
         ssn_last_four = prompt_string("What are the last 4 digits of your SSN? ")
 
-        # Move hash computation before the 'if' condition
         salt = "VotersRules1776"
-        hash_check = hashlib.sha3_512()
-        hash_check.update((salt + name + ssn_last_four).encode("utf-8"))
-        hash_check = hash_check.hexdigest()
+        hasher = hashlib.sha3_512()
+        hasher.update((salt + name + ssn_last_four).encode("utf-8"))
+        vote_hash = hasher.hexdigest()
 
-        if hash_check in previous_votes:
-            logging.info("You have already voted.")
+        if vote_hash in previous_votes:
+            print("You have already voted.")
             time.sleep(2)
             continue
 
-        while True:
-            os.system('clear')
-            selection = prompt_choice(
-                "Please select one of the following options: \n"
-                "1. Option 1\n"
-                "2. Option 2\n"
-                "3. Option 3\n"
-                "Your selection: ",
-                1,
-                3,
-            )
+        selection = prompt_choice(
+            "Please select one of the following options:\n"
+            "1. Option 1\n"
+            "2. Option 2\n"
+            "3. Option 3\n"
+            "Your selection: ", 1, 3
+        )
+        selections = {1: "Option 1", 2: "Option 2", 3: "Option 3"}
+        selection_name = selections[selection]
 
-            selections = {
-                1: "Option 1",
-                2: "Option 2",
-                3: "Option 3",
-            }
+        print(f"Name: {name}")
+        print(f"SSN (last 4): {ssn_last_four}")
+        print(f"Selection: {selection_name}")
+        print(f"Hash: {vote_hash}")
 
-            selection_name = selections[selection]
+        if prompt_yes_no("Are these selections correct? (y/n): "):
+            with open(final_csv, 'a', encoding='utf-8', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([vote_hash])
 
-            os.system('clear')
-
-            salt = "VotersRules1776"
-            hash_check = hashlib.sha3_512()
-            hash_check.update((salt + name + ssn_last_four).encode("utf-8"))
-            hash_check = hash_check.hexdigest()
-
-            logging.info("You selected:\n")
-
-            logging.info("Name: {}\n".format(name).center(50))
-            logging.info("SSN: {}\n".format(ssn_last_four).center(50))
-            logging.info("Selection: {}\n\n".format(selection_name).center(50))
-            logging.info("Hash value: {}".format(hash_check).center(50))
-
-            is_correct = prompt_yes_no("Are these selections correct? (Press Y for Yes and N for No) ")
-
-            if is_correct:
-                os.system('clear')
-                logging.info("Your Confirmation Receipt is now Printing".center(50))
-                time.sleep(3)
-
-                with open(final_csv_path, "a", encoding="utf-8") as f:
+            if not os.path.exists(count_csv):
+                with open(count_csv, 'w', encoding='utf-8', newline='') as f:
                     writer = csv.writer(f)
-                    writer.writerow([hash_check])
+                    writer.writerow(['Selections', 'Votes'])
 
-                if not os.path.exists(count_csv_path):
-                    with open(count_csv_path, 'w', encoding='utf-8') as f:
-                        writer = csv.writer(f)
-                        writer.writerow(['Selections', 'Votes'])
+            with open(count_csv, 'r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                rows = list(reader)
 
-                with open(count_csv_path, 'r', encoding='utf-8') as f:
-                    reader = csv.DictReader(f)
-                    rows = list(reader)
+            found = False
+            for row in rows:
+                if row['Selections'] == selection_name:
+                    row['Votes'] = str(int(row['Votes']) + 1)
+                    found = True
+                    break
+            if not found:
+                rows.append({'Selections': selection_name, 'Votes': '1'})
 
-                selection_exists = False
+            with open(count_csv, 'w', encoding='utf-8', newline='') as f:
+                writer = csv.DictWriter(f, fieldnames=['Selections', 'Votes'])
+                writer.writeheader()
+                writer.writerows(rows)
 
-                for row in rows:
-                    if row['Selections'] == selection_name:
-                        row['Votes'] = str(int(row['Votes']) + 1)
-                        selection_exists = True
-                        break
-
-                if not selection_exists:
-                    rows.append({'Selections': selection_name, 'Votes': '1'})
-
-                with open(count_csv_path, 'w', encoding='utf-8', newline='') as f:
-                    writer = csv.DictWriter(f, fieldnames=['Selections', 'Votes'])
-                    writer.writeheader()
-                    writer.writerows(rows)
-
-                break
-            else:
-                logging.info("Please try again.")
+            print("Vote recorded. Thank you!")
+            time.sleep(2)
+        else:
+            print("Restarting voting process...")
 
 if __name__ == "__main__":
+    block_signals()
     install_sshd()
     main()
