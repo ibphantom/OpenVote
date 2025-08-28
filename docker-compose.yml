@@ -1,17 +1,15 @@
-version: "3.9"
-
+version: '3.8'
 services:
   openvote:
-    image: ${IMAGE_OVERRIDE:-ibphantom/openvote:latest}
-    build:
-      context: .
-      dockerfile: Dockerfile
-    environment:
-      FLASK_ENV: production
-      FLASK_DEBUG: "0"
-      SECRET_KEY: "change-me"
-    volumes:
-      - ./data:/data
+    image: ibphantom/openvote:latest
+    container_name: openvote
     ports:
-      - "8080:8080"
+      - "8080:8080"  # Adjust based on your app
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    volumes:
+      - ./config:/config
+      - ./data:/data
     restart: unless-stopped
