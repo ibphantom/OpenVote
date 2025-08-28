@@ -1,10 +1,23 @@
+<?xml version="1.0"?>
 <Container>
-  <Name>Open Vote</Name>
-  <Repository>OpenVote</Repository>
-  <WebUI>https://github.com/ibphantom/OpenVote</WebUI>
+  <Name>OpenVote</Name>
+  <Repository>ibphantom/openvote:latest</Repository>
+  <Registry>https://hub.docker.com/r/ibphantom/openvote</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
   <Support>https://github.com/ibphantom/OpenVote</Support>
-  <Category>Research</Category>
-  <Description>Creating an open source voting system that cannot be tampered with and proves valditity from local to state to federal</Description>
-  <PostArgs>-p 8000:8000</PostArgs>
-  <Config Name="VAR_NAME" Description="Description of the variable." Type="text" DefaultValue="value" Display="always"/>
+  <Project>https://github.com/ibphantom/OpenVote</Project>
+  <Overview>A containerized build of OpenVote for unRAID.</Overview>
+  <Category>Productivity: Tools</Category>
+  <Icon>https://raw.githubusercontent.com/ibphantom/OpenVote/main/docs/icon.png</Icon>
+  <WebUI>http://[IP]:[PORT:8080]/</WebUI>
+  <ExtraParams></ExtraParams>
+  <Config Name="Host Port 1" Target="8080" Default="8080" Mode="tcp" Description="Application port" Type="Port" Display="always">8080</Config>
+  <Config Name="Data" Target="/data" Default="/mnt/user/appdata/openvote" Description="Persistent storage" Type="Path" Display="always">/mnt/user/appdata/openvote</Config>
+  <Config Name="PUID" Target="PUID" Default="99" Description="User ID for file ownership" Type="Variable" Display="always">99</Config>
+  <Config Name="PGID" Target="PGID" Default="100" Description="Group ID for file ownership" Type="Variable" Display="always">100</Config>
+  <Config Name="UMASK" Target="UMASK" Default="022" Description="Umask for created files" Type="Variable" Display="advanced">022</Config>
+  <Config Name="APP_MODULE" Target="APP_MODULE" Default="openvote.app:app" Description="WSGI/ASGI app module" Type="Variable" Display="advanced">openvote.app:app</Config>
 </Container>
