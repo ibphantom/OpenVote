@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   openvote:
     image: ${IMAGE_OVERRIDE:-ibphantom/openvote:latest}
@@ -5,11 +7,9 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      PUID: "${PUID:-99}"      # unRAID default 'nobody'
-      PGID: "${PGID:-100}"     # unRAID default 'users'
-      PORT: "8080"
-      APP_MODULE: "openvote.app:app"  # <-- adjust if your module name differs
-      UMASK: "022"
+      FLASK_ENV: production
+      FLASK_DEBUG: "0"
+      SECRET_KEY: "change-me"
     volumes:
       - ./data:/data
     ports:
