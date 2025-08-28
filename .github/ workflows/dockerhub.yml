@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Defaults tuned for unRAID
+: "${PUID:=1000}"
+: "${PGID:=1000}"
+: "${UMASK:=022}"
+: "${PORT:=8080}"
+: "${APP_MODULE:=openvote.app:app}"   # <-- If your WSGI/ASGI entry differs, change this
+: "${WORKERS:=2}"
+: "${TIMEOUT:=30}"
+
+# Create group/user matching PUID/PGID on the fly
+if ! getent group appgroup >/dev/null 2>&1; then
+  groupadd -g "${PGID}" appgroup
+fi
+if ! id -u appuser >/dev/null 2>&1; then
+  useradd -u "${PUID}" -g "${PGID}" -m -s /bin/bash appuser
+fi
+chown -R appuser:appgroup /app || true
+umask "${UMASK}"
+
+# Prefer gunicorn if it's a WSGI app, otherwise fall back to uvicorn for ASGI
+if python - <<'PY' >/dev/null 2>&1; then
+import importlib, os, sys
+mod = os.environ.get("APP_MODULE","openvote.app:app").split(":")[0]
+importlib.import_module(mod)
+PY
+then
+  exec gosu appuser:appgroup \
+    gunicorn "$APP_MODULE" -b 0.0.0.0:"$PORT" --workers "$WORKERS" --timeout "$TIMEOUT"
+else
+  # ASGI fallback
+  exec gosu appuser:appgroup \
+    python -m uvicorn "$APP_MODULE" --host 0.0.0.0 --port "$PORT"
+fi
