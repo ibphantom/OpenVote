@@ -1,10 +1,17 @@
-version: '3'
 services:
-  app:
-    image: Open Vote
-    ports:
-      - "8000:8000"
+  openvote:
+    image: ${IMAGE_OVERRIDE:-ibphantom/openvote:latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
-      - VAR_NAME=value
+      PUID: "${PUID:-99}"      # unRAID default 'nobody'
+      PGID: "${PGID:-100}"     # unRAID default 'users'
+      PORT: "8080"
+      APP_MODULE: "openvote.app:app"  # <-- adjust if your module name differs
+      UMASK: "022"
     volumes:
-      - /path/to/data:/app/data
+      - ./data:/data
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
