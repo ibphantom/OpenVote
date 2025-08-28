@@ -1,35 +1,38 @@
-# Start from a slim Python base
-FROM python:3.12-slim
+# syntax=docker/dockerfile:1.7
+FROM python:3.12-slim AS base
 
-# Install system dependencies (no UFW, no autoconf)
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    POETRY_VIRTUALENVS_CREATE=0
+
+WORKDIR /app
+
+# Build deps minimal set for common Python libs and gosu for PUID/PGID runtime user switch
 RUN apt-get update && \
-    apt-get install -y nano openssh-server && \
-    rm -rf /var/lib/apt/lists/* && \
-    ln -s /usr/bin/clear /usr/bin/cls
+    apt-get install -y --no-install-recommends build-essential curl ca-certificates gosu && \
+    rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip and install Python packages
-RUN pip install --upgrade pip && \
-    pip install pycrypto pycryptodome paramiko scapy
+# Pre-copy only requirements for better layer caching
+COPY requirements.txt /app/requirements.txt
+RUN pip install --upgrade pip && pip install -r /app/requirements.txt
 
-# Metadata
-LABEL maintainer="ibPhantom <your.email@example.com>" \
-      org.label-schema.description="A containerized version of OpenVote" \
-      org.label-schema.version="0.1.1" \
-      org.label-schema.build-date="2023-05-22" \
-      org.opencontainers.image.source="https://github.com/ibphantom/OpenVote/"
+# Copy the rest of the application
+COPY . /app
 
-# Copy scripts
-WORKDIR /OpenVote
-COPY /scripts/ ./
+# Add entrypoint script
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Make all Python scripts executable
-RUN chmod +x *.py FINAL.csv
+# Non-root default; IDs will be remapped at runtime by entrypoint using gosu
+RUN useradd -u 1000 -m appuser && \
+    groupadd -g 1000 appgroup && \
+    usermod -a -G appgroup appuser
 
-# Environment variables
-ENV PORT=8000
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV HOSTNAME=OpenVoteNode
+EXPOSE 8080
 
-# Expose port and set default command
-EXPOSE 8000
-CMD ["python3", "/OpenVote/start.py"]
+# Simple HTTP healthcheck; adjust if your app exposes a different path
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD curl -fsS http://127.0.0.1:8080/health || exit 1
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
